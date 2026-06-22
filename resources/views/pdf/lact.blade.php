@@ -632,7 +632,7 @@
             <th>Tanggal</th>
             <td>{{ $approval->decided_at?->format('d F Y H:i') ?? '-' }}</td>
         </tr>
-        @if($approval->notes)
+        @if(isset($approval) && $approval && $approval->notes)
         <tr>
             <th>Catatan</th>
             <td>{{ $approval->notes }}</td>

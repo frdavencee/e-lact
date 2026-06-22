@@ -71,11 +71,6 @@ class Project extends Model
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    public function approval()
-    {
-        return $this->morphOne(Approval::class, 'approvable');
-    }
-
     public function mancoreItems(): HasMany
     {
         return $this->hasMany(MancoreItem::class, 'project_id');
