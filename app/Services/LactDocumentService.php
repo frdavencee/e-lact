@@ -49,7 +49,7 @@ class LactDocumentService
         $section->addPageBreak();
 
         // Halaman 2: Daftar Isi
-        $this->addTableOfContents($section);
+        $this->addTableOfContents($section, $lokasi);
         $section->addPageBreak();
 
         // Section 1: Laporan Commissioning Test
@@ -179,20 +179,35 @@ class LactDocumentService
 
     }
 
-    protected function addTableOfContents($section): void
+    protected function addTableOfContents($section, Lokasi $lokasi): void
     {
         $section->addTextBreak(1);
         $section->addText('DAFTAR ISI', ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
         $section->addText('DOKUMEN LAPORAN COMMISIONING TEST', ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
         $section->addText('(LACT)', ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER, 'spaceAfter' => 400]);
 
+        // Item tetap
         $items = [
             'Laporan Commisioning Test',
-            'Lampiran Bill Of Quantity',
-            'Hasil Ukur OPM & OTDR (End To End Sesuai SOW)',
-            'Lampiran Mancore',
-            'Berita Acara Lapangan & Dokumen Pendukung Lainnya',
+            'Laporan Bill Of Quantity',
+            'Lampiran Evident Pekerjaan',
+            'Lampiran Marking Kabel',
+            'Lampiran Evidence ODP',
+            'Lampiran Evidence Aksesoris',
+            'Lampiran Evidence Closure Dan Spliter 1:4',
+            'Lampiran Evident Hasil Ukur OPM',
+            'Lampiran Data Pengukuran OPM Project Outside Plant Fiber Optic',
         ];
+
+        // Tambah item OTDR dinamis per ODP
+        $otdrByOdp = $lokasi->otdrFiles->groupBy('odp_name');
+        foreach ($otdrByOdp as $odpName => $files) {
+            $items[] = 'Lampiran Hasil Ukur OTDR ' . strtoupper($odpName);
+        }
+
+        $items[] = 'Lampiran Mancore';
+        $items[] = 'Lampiran Evident As Build Drawing (ABD)';
+
         foreach ($items as $i => $item) {
             $section->addText(($i + 1) . '.   ' . $item, [], ['spaceAfter' => 200]);
         }
