@@ -16,6 +16,7 @@ class GenerateDocxController extends Controller
             'project.branchRelation',
             'project.waspangRelation',
             'commissioningTest.personel',
+            'commissioningTest.images',
             'boqItems',
             'markingKabel',
             'fotoLampiran',
