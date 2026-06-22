@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\Lokasi;
-use App\Models\Project;
-use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\SimpleType\Jc;
@@ -46,23 +44,27 @@ class LactDocumentService
             'marginRight' => 1200,
         ]);
 
+        // Halaman 1: Cover
         $this->addCover($section, $lokasi);
-        $this->addTableOfContents($section, $lokasi);
-
-        // Section 1: Commissioning Test
         $section->addPageBreak();
+
+        // Halaman 2: Daftar Isi
+        $this->addTableOfContents($section);
+        $section->addPageBreak();
+
+        // Section 1: Laporan Commissioning Test
         $this->addSectionHeader($section, $lokasi);
-        $section->addText('LAPORAN COMMISSIONING TEST', ['bold' => true, 'size' => 14], ['spaceAfter' => 200]);
+        $section->addText('LAPORAN COMMISIONING TEST', ['bold' => true, 'size' => 14], ['spaceAfter' => 200]);
         $this->addCommissioningTest($section, $lokasi->commissioningTest, $lokasi);
 
-        // Section 2: Bill of Quantity
+        // Section 2: Laporan Bill of Quantity
         $section->addPageBreak();
         $this->addSectionHeader($section, $lokasi);
         $section->addText('LAPORAN BILL OF QUANTITY', ['bold' => true, 'size' => 14], ['spaceAfter' => 200]);
         $this->addBoqTable($section, $lokasi->boqItems);
-        $this->addSignatureBlock($section, $lokasi, true);
+        $this->addPhotoPageSignature($section, $lokasi);
 
-        // Section 3: Lampiran Evident Pekerjaan
+        // Section 3: Lampiran Evident Pekerjaan (4 kategori digabung dalam 1 grid)
         $section->addPageBreak();
         $this->addSectionHeader($section, $lokasi);
         $section->addText('LAMPIRAN EVIDENT PEKERJAAN', ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
@@ -72,18 +74,16 @@ class LactDocumentService
         $section->addPageBreak();
         $this->addSectionHeader($section, $lokasi);
         $section->addText('LAMPIRAN MARKING KABEL', ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-        $this->addMarkingKabelGrid($section, $lokasi->markingKabel, $lokasi);
+        $this->addMarkingKabelGrid($section, $lokasi->fotoLampiran, $lokasi);
 
-        // Section 5: Lampiran Evidence ODP
-        $this->addEvidenceByCategory($section, $lokasi, 'odp_solid', 'LAMPIRAN EVIDENCE ODP');
-        $this->addEvidenceByCategory($section, $lokasi, 'pemasangan_odp', 'LAMPIRAN EVIDENCE ODP');
+        // Section 5: Lampiran Evidence ODP (gabung odp_solid + pemasangan_odp)
+        $this->addEvidenceMerged($section, $lokasi, ['odp_solid', 'pemasangan_odp'], 'LAMPIRAN EVIDENCE ODP');
 
-        // Section 6: Lampiran Evidence Aksesoris
-        $this->addEvidenceByCategory($section, $lokasi, 'aksesoris_hl', 'LAMPIRAN EVIDENCE AKSESORIS');
-        $this->addEvidenceByCategory($section, $lokasi, 'aksesoris_sc', 'LAMPIRAN EVIDENCE AKSESORIS');
+        // Section 6: Lampiran Evidence Aksesoris (gabung aksesoris_hl + aksesoris_sc)
+        $this->addEvidenceMerged($section, $lokasi, ['aksesoris_hl', 'aksesoris_sc'], 'LAMPIRAN EVIDENCE AKSESORIS');
 
         // Section 7: Lampiran Evidence Closure dan Spliter 1:4
-        $this->addEvidenceByCategory($section, $lokasi, 'closure_splitter', 'LAMPIRAN EVIDENCE CLOSURE DAN SPLITER 1:4');
+        $this->addEvidenceMerged($section, $lokasi, ['closure_splitter'], 'LAMPIRAN EVIDENCE CLOSURE DAN SPLITER 1:4');
 
         // Section 8: Lampiran Evident Hasil Ukur OPM
         $section->addPageBreak();
@@ -99,10 +99,10 @@ class LactDocumentService
         $this->addOtdrByOdp($section, $lokasi);
 
         // Section: Lampiran Mancore
-        $this->addEvidenceByCategory($section, $lokasi, 'mancore', 'LAMPIRAN MANCORE');
+        $this->addEvidenceMerged($section, $lokasi, ['mancore'], 'LAMPIRAN MANCORE');
 
         // Section: Lampiran Evident As Build Drawing (ABD)
-        $this->addEvidenceByCategory($section, $lokasi, 'as_build_drawing', 'LAMPIRAN EVIDENT AS BUILD DRAWING (ABD)');
+        $this->addEvidenceMerged($section, $lokasi, ['as_build_drawing'], 'LAMPIRAN EVIDENT AS BUILD DRAWING (ABD)');
 
         // Save
         $directory = storage_path('app/public/generated');
@@ -146,10 +146,8 @@ class LactDocumentService
     // ===================================================================
     protected function addCover($section, Lokasi $lokasi): void
     {
-        $project = $lokasi->project ?? $lokasi->location;
-        $waspang = $project ? $project->waspangRelation : null;
         $data = $this->getProjectData($lokasi);
-        $waspangName = $waspang ? $waspang->name : 'PT TELKOM AKSES';
+        $waspangName = $data['pelaksana'];
 
         $section->addText('LAPORAN  COMMISSIONING TEST (LACT)', ['bold' => true, 'size' => 18], [
             'alignment' => Jc::CENTER,
@@ -179,23 +177,9 @@ class LactDocumentService
         $section->addText('DENGAN', ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
         $section->addText($waspangName, ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 400]);
 
-        // Daftar Isi
-        $section->addText('DAFTAR ISI', ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-        $section->addText('DOKUMEN LAPORAN COMMISIONING TEST (LACT)', ['bold' => true], ['spaceAfter' => 100]);
-
-        $items = [
-            'Laporan Commisioning Test',
-            'Lampiran Bill Of Quantity',
-            'Hasil Ukur OPM & OTDR (End To End Sesuai SOW)',
-            'Lampiran Mancore',
-            'Berita Acara Lapangan & Dokumen Pendukung Lainnya',
-        ];
-        foreach ($items as $i => $item) {
-            $section->addText($i + 1 . '. ' . $item, [], ['spaceAfter' => 100]);
-        }
     }
 
-    protected function addTableOfContents($section, Lokasi $lokasi): void
+    protected function addTableOfContents($section): void
     {
         $section->addTextBreak(1);
         $section->addText('DAFTAR ISI', ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
@@ -219,7 +203,6 @@ class LactDocumentService
     // ===================================================================
     protected function addSectionHeader($section, Lokasi $lokasi): void
     {
-        $project = $lokasi->project ?? $lokasi->location;
         $data = $this->getProjectData($lokasi);
 
         $table = $section->addTable(['borderSize' => 4, 'borderColor' => '000000', 'cellPadding' => 80]);
@@ -331,7 +314,7 @@ class LactDocumentService
 
         $sigTable = $section->addTable(['borderSize' => 0, 'cellPadding' => 80]);
         $sigTable->addRow();
-        $cellKiri = $sigTable->addCell(5000);
+        $sigTable->addCell(5000); // spacer kiri
         $cellKanan = $sigTable->addCell(5000);
 
         // Kanan: tanda tangan
@@ -394,20 +377,17 @@ class LactDocumentService
         }
     }
 
-    // ===================================================================
-    // LOGIC 6: SIGNATURE BLOCK
-    // ===================================================================
     protected function addSignatureBlock($section, Lokasi $lokasi, bool $withName = false): void
     {
-        $project = $lokasi->project ?? $lokasi->location;
-        $waspang = $project->waspangRelation ?? null;
+        $project = $lokasi->project;
+        $waspang = $project?->waspangRelation ?? null;
         $tanggal = tanggalKeHuruf($lokasi->created_at ?? now());
         $ttdText = strtoupper($lokasi->branch->name ?? 'SEMARANG') . ', ' . $tanggal['tanggal'] . ' ' . $tanggal['bulan'] . ' ' . $tanggal['tahun'];
 
         $sigTable = $section->addTable(['borderSize' => 0]);
         $sigTable->addRow();
         $cell1 = $sigTable->addCell(5000);
-        $cell2 = $sigTable->addCell(5000);
+        $sigTable->addCell(5000); // spacer kanan
 
         $cell1->addText($ttdText, ['bold' => true]);
         $cell1->addText('WASPANG');
@@ -424,68 +404,70 @@ class LactDocumentService
     }
 
     // ===================================================================
-    // LOGIC 7: EVIDENCE GRID (FOTO DENGAN PARAF)
+    // LOGIC 7: EVIDENCE GRID — gabung 4 kategori dalam 1 grid
     // ===================================================================
     protected function addEvidenceGrid($section, $fotos, Lokasi $lokasi): void
     {
-        $categories = [
-            'evident_penarikan_kabel'     => 'LAPORAN COMMISSIONING TEST',
-            'evident_instalasi_aksesoris' => 'LAPORAN BILL OF QUANTITY',
-            'evident_closure'             => 'LAMPIRAN EVIDENT PEKERJAAN',
-            'evident_odp'                 => 'LAMPIRAN EVIDENT PEKERJAAN',
+        $categoryKeys = [
+            'evident_penarikan_kabel',
+            'evident_instalasi_aksesoris',
+            'evident_closure',
+            'evident_odp',
         ];
 
-        $fotosByCategory = $fotos->groupBy('kategori');
-        foreach ($categories as $catKey => $catLabel) {
-            $items = $fotosByCategory->get($catKey, collect());
-            if ($items->count() === 0) continue;
-
-            $section->addPageBreak();
-            $this->addSectionHeader($section, $lokasi);
-            $section->addText($catLabel, ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-            $this->addFotoGrid($section, $lokasi, $items->values(), $catLabel);
-        }
-    }
-
-    // ===================================================================
-    // LOGIC 8: MARKING KABEL GRID
-    // ===================================================================
-    protected function addMarkingKabelGrid($section, $markingKabels, Lokasi $lokasi): void
-    {
-        foreach ($markingKabels as $mk) {
-            $section->addText(($mk->jenis_kabel ?? '-') . ' = ' . ($mk->panjang_meter ?? 0) . ' METER', [], ['spaceAfter' => 100]);
+        $combined = collect();
+        foreach ($categoryKeys as $key) {
+            $combined = $combined->merge($fotos->where('kategori', $key)->values());
         }
 
-        $fotos = $lokasi->fotoLampiran->where('kategori', 'marking_kabel')->values();
-        if ($fotos->count() > 0) {
-            $section->addTextBreak(1);
-            $section->addText('LAMPIRAN MARKING KABEL', ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-            $this->addFotoGrid($section, $lokasi, $fotos, 'LAMPIRAN MARKING KABEL');
-        } else {
+        if ($combined->count() === 0) {
             $this->addPhotoPageSignature($section, $lokasi);
+            return;
         }
+
+        $this->addFotoGrid($section, $lokasi, $combined, 'LAMPIRAN EVIDENT PEKERJAAN');
     }
 
     // ===================================================================
-    // LOGIC 9: EVIDENCE BY CATEGORY (ODP, AKSESORIS, CLOSURE, MANCORE, ABD)
+    // LOGIC 8: MARKING KABEL GRID — hanya foto kategori marking_kabel
     // ===================================================================
-    protected function addEvidenceByCategory($section, Lokasi $lokasi, string $category, string $title): void
+    protected function addMarkingKabelGrid($section, $fotos, Lokasi $lokasi): void
     {
-        $fotos = $lokasi->fotoLampiran->where('kategori', $category)->values();
-        if ($fotos->count() === 0) return;
+        $items = $fotos->where('kategori', 'marking_kabel')->values();
+
+        if ($items->count() === 0) {
+            $this->addPhotoPageSignature($section, $lokasi);
+            return;
+        }
+
+        $this->addFotoGrid($section, $lokasi, $items, 'LAMPIRAN MARKING KABEL');
+    }
+
+    // ===================================================================
+    // LOGIC 9: EVIDENCE MERGED — gabung beberapa kategori dalam 1 halaman
+    // ===================================================================
+    protected function addEvidenceMerged($section, Lokasi $lokasi, array $categories, string $title): void
+    {
+        $combined = collect();
+        foreach ($categories as $cat) {
+            $combined = $combined->merge($lokasi->fotoLampiran->where('kategori', $cat)->values());
+        }
+
+        if ($combined->count() === 0) return;
 
         $section->addPageBreak();
         $this->addSectionHeader($section, $lokasi);
         $section->addText(strtoupper($title), ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-        $this->addFotoGrid($section, $lokasi, $fotos, strtoupper($title));
+        $this->addFotoGrid($section, $lokasi, $combined, strtoupper($title));
     }
 
     // ===================================================================
-    // LOGIC 7b: REUSABLE FOTO GRID PER HALAMAN (6 FOTO, TABEL, PARAF KANAN BAWAH)
+    // LOGIC 7b: REUSABLE FOTO GRID — 6 foto per halaman, paraf hanya di akhir
     // ===================================================================
     protected function addFotoGrid($section, Lokasi $lokasi, $fotos, string $title): void
     {
         $pages = $fotos->chunk(6);
+        $totalPages = $pages->count();
 
         foreach ($pages as $pageIndex => $pageChunk) {
             if ($pageIndex > 0) {
@@ -516,20 +498,26 @@ class LactDocumentService
                         $cell->addText('[File tidak ditemukan]', ['size' => 9]);
                     }
                 }
-                for ($i = $chunk->count(); $i < 3; $i++) $fotoTable->addCell(3333);
+                for ($i = $chunk->count(); $i < 3; $i++) {
+                    $fotoTable->addCell(3333);
+                }
 
                 // Baris label
                 $fotoTable->addRow();
                 foreach ($chunk as $foto) {
                     $fotoTable->addCell(3333)->addText($foto->label ?? '', ['size' => 9, 'italic' => true]);
                 }
-                for ($i = $chunk->count(); $i < 3; $i++) $fotoTable->addCell(3333);
+                for ($i = $chunk->count(); $i < 3; $i++) {
+                    $fotoTable->addCell(3333);
+                }
             }
 
             $section->addTextBreak(1);
 
-            // Tabel tanda tangan paraf di kanan bawah
-            $this->addPhotoPageSignature($section, $lokasi);
+            // Tanda tangan paraf hanya di halaman terakhir
+            if ($pageIndex === $totalPages - 1) {
+                $this->addPhotoPageSignature($section, $lokasi);
+            }
         }
     }
 
@@ -591,23 +579,27 @@ class LactDocumentService
     // ===================================================================
     protected function addOpmDataTable($section, Lokasi $lokasi): void
     {
-        $section->addText('LAMPIRAN DATA PENGUKURAN OPM', ['bold' => true, 'size' => 14], ['spaceAfter' => 200]);
+        $section->addText('LAMPIRAN DATA PENGUKURAN OPM', ['bold' => true, 'size' => 14], ['spaceAfter' => 100]);
         $section->addText('PROJECT OUTSIDE PLANT FIBER OPTIC', ['bold' => true], ['spaceAfter' => 200]);
 
+        $data = $this->getProjectData($lokasi);
+        $waspang = $lokasi->project?->waspangRelation ?? null;
         $tanggal = tanggalKeHuruf($lokasi->created_at ?? now());
-        $section->addText(
-            strtoupper($lokasi->branch->name ?? 'SEMARANG') . ', ' . $tanggal['tanggal'] . ' ' . $tanggal['bulan'] . ' ' . $tanggal['tahun'],
-            ['bold' => true],
-            ['alignment' => Jc::RIGHT, 'spaceAfter' => 200]
-        );
+        $kotaTtd = strtoupper($data['branch'] !== '-' ? $data['branch'] : 'SEMARANG');
+        $ttdText = $kotaTtd . ', ' . $tanggal['tanggal'] . ' ' . $tanggal['bulan'] . ' ' . $tanggal['tahun'];
 
-        $waspang = $lokasi->waspang ?? $lokasi->project->waspangRelation ?? null;
-        $section->addText('WASPANG', [], ['alignment' => Jc::RIGHT]);
-        $section->addText('PT TELKOM AKSES', [], ['alignment' => Jc::RIGHT]);
-        $section->addTextBreak(1);
+        // Tanda tangan kanan dengan nama lengkap
+        $outerTable = $section->addTable(['borderSize' => 0, 'cellPadding' => 0]);
+        $outerTable->addRow();
+        $outerTable->addCell(5000); // spacer kiri
+        $rightCell = $outerTable->addCell(5000);
+        $rightCell->addText($ttdText, ['bold' => true]);
+        $rightCell->addText('WASPANG');
+        $rightCell->addText('PT TELKOM AKSES');
+        $rightCell->addTextBreak(3);
         if ($waspang) {
-            $section->addText($waspang->name, ['bold' => true], ['alignment' => Jc::RIGHT]);
-            $section->addText('NIK : ' . $waspang->nik, [], ['alignment' => Jc::RIGHT]);
+            $rightCell->addText($waspang->name, ['bold' => true]);
+            $rightCell->addText('NIK : ' . ($waspang->nik ?? '-'));
         }
 
         $section->addTextBreak(2);
@@ -710,7 +702,6 @@ class LactDocumentService
 
         // Baris 4: nama
         $sigTable->addRow();
-        $nameKiri = $waspang ? $waspang->name . "\nNIK: " . ($waspang->nik ?? '-') : '(......................)';
         $sigTable->addCell(2500)->addText($waspang ? $waspang->name : '(......................)', ['bold' => true, 'size' => 9], ['alignment' => Jc::CENTER]);
         $sigTable->addCell(2500)->addText('(......................)', ['size' => 9], ['alignment' => Jc::CENTER]);
 
