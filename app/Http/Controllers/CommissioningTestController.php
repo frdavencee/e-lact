@@ -92,6 +92,14 @@ class CommissioningTestController extends Controller
         return back()->with('success', 'Commissioning test berhasil dihapus.');
     }
 
+    public function destroyImage(Lokasi $lokasi, CommissioningTestImage $image)
+    {
+        Storage::disk('public')->delete($image->file_path);
+        $image->delete();
+
+        return back()->with('success', 'Gambar berhasil dihapus.');
+    }
+
     private function storeImages(Request $request, CommissioningTest $commissioningTest): void
     {
         if (!$request->hasFile('images')) {

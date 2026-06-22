@@ -197,9 +197,11 @@ class LactDocumentService
 
     protected function addTableOfContents($section, Lokasi $lokasi): void
     {
-        // Simple table of contents placeholder
         $section->addTextBreak(1);
-        $section->addText('DAFTAR ISI', ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
+        $section->addText('DAFTAR ISI', ['bold' => true, 'size' => 14], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
+        $section->addText('DOKUMEN LAPORAN COMMISIONING TEST', ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
+        $section->addText('(LACT)', ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER, 'spaceAfter' => 400]);
+
         $items = [
             'Laporan Commisioning Test',
             'Lampiran Bill Of Quantity',
@@ -208,7 +210,7 @@ class LactDocumentService
             'Berita Acara Lapangan & Dokumen Pendukung Lainnya',
         ];
         foreach ($items as $i => $item) {
-            $section->addText(($i + 1) . '. ' . $item, [], ['spaceAfter' => 100]);
+            $section->addText(($i + 1) . '.   ' . $item, [], ['spaceAfter' => 200]);
         }
     }
 
@@ -242,10 +244,30 @@ class LactDocumentService
     // ===================================================================
     protected function addCommissioningTest($section, $ct, Lokasi $lokasi): void
     {
-        $lokasiName = 'PATI [' . $lokasi->code . ']';
+        $lokasiName = $lokasi->name . ' [' . $lokasi->code . ']';
         $tanggal = tanggalKeHuruf($ct->tanggal);
         $waspang = $ct->personel;
+        $data = $this->getProjectData($lokasi);
 
+        // Tabel info proyek
+        $table = $section->addTable(['borderSize' => 0, 'cellPadding' => 80]);
+        $rows = [
+            ['PROYEK',        ': ' . $data['nama_proyek']],
+            ['KONTRAK',       ': ' . $data['kontrak']],
+            ['SURAT PESANAN', ': ' . $data['surat_pesanan']],
+            ['BRANCH',        ': ' . $data['branch']],
+            ['LOKASI',        ': ' . $lokasiName],
+            ['PELAKSANA',     ': ' . $data['pelaksana']],
+        ];
+        foreach ($rows as $row) {
+            $table->addRow();
+            $table->addCell(2000)->addText($row[0], ['bold' => true]);
+            $table->addCell(8000)->addText($row[1]);
+        }
+
+        $section->addTextBreak(1);
+
+        // Narasi pembuka
         $section->addText(
             'Pada hari ini ' . ($tanggal['nama_hari'] ?? '-') .
             ' tanggal ' . ($tanggal['tanggal'] ?? '-') .
@@ -256,98 +278,86 @@ class LactDocumentService
             ['spaceAfter' => 200]
         );
 
-        $section->addText('Nama     :   ' . ($waspang->name ?? '-'), [], ['spaceAfter' => 100]);
-        $section->addText('NIK      :   ' . ($waspang->nik ?? '-'), [], ['spaceAfter' => 100]);
-        $section->addText('Jabatan  :   ' . ($waspang->position ?? 'WASPANG'), [], ['spaceAfter' => 200]);
+        // Identitas waspang (tabel tanpa border)
+        $idTable = $section->addTable(['borderSize' => 0, 'cellPadding' => 60]);
+        $idRows = [
+            ['Nama',    $waspang->name ?? '-'],
+            ['NIK',     $waspang->nik ?? '-'],
+            ['Jabatan', $waspang->position ?? 'WASPANG PT. TELKOM AKSES'],
+        ];
+        foreach ($idRows as $row) {
+            $idTable->addRow();
+            $idTable->addCell(1500)->addText($row[0]);
+            $idTable->addCell(200)->addText(':');
+            $idTable->addCell(8300)->addText($row[1]);
+        }
 
+        $section->addTextBreak(1);
+
+        // Paragraf keterangan
         $section->addText(
             'Sehubungan dengan ' . $lokasiName .
-            ' menerangkan bahwa telah melaksanakan pemeriksaan kesisteman (Commissioning Test)' .
+            ' menerangkan bahwa telah melaksanakan pemeriksaan kesisteman (Commisioning Test)' .
             ' dan fisik pada lokasi ' . $lokasiName . ' sebagai berikut :',
             [],
             ['spaceAfter' => 200]
         );
 
-        $section->addText('1. Pelaksanaan pekerjaan ' . ($ct->status_pekerjaan === 'telah' ? 'telah' : 'belum') . ' diselesaikan dengan spesifikasi teknis TELKOM', [], ['spaceAfter' => 100]);
+        // Poin-poin
+        $statusPekerjaan = $ct->status_pekerjaan === 'telah' ? 'telah' : 'belum';
+        $statusHasil = $ct->status_hasil === 'dapat' ? 'dapat' : 'tidak dapat';
+        $statusLayak = $ct->status_kelayakan === 'layak' ? 'layak' : 'tidak layak';
+
         $section->addText(
-            '2. Hasil pekerjaan ' . ($ct->status_hasil === 'dapat' ? 'dapat' : 'tidak dapat') .
-            ' diterima dan ' . ($ct->status_kelayakan === 'layak' ? 'layak' : 'tidak layak') .
-            ' untuk diajukan Uji Terima (UT)',
+            '1.   Pelaksanaan pekerjaan ' . $statusPekerjaan . ' diselesaikan dengan spesifikasi teknis TELKOM',
+            [],
+            ['spaceAfter' => 100]
+        );
+        $section->addText(
+            '2.   Hasil pekerjaan ' . $statusHasil . ' diterima dan ' . $statusLayak . ' untuk diajukan Uji Terima (UT)',
             [],
             ['spaceAfter' => 200]
         );
 
-        $section->addText('Demikian Laporan Commissioning Test dan Hasil Ukur ini dibuat dengan sebenarnya dan dapat dipertanggung jawabkan.', [], ['spaceAfter' => 300]);
+        $section->addText(
+            'Demikian Laporan Commisioning Test dan Hasil Ukur ini dibuat dengan sebenarnya dan dapat dipertanggung jawabkan.',
+            [],
+            ['spaceAfter' => 400]
+        );
 
-        // Signature block
-        $kotaTtd = $ct->kota_ttd ?? '-';
-        $tanggalTtd = $tanggal['tanggal'] ?? '-';
-        $bulanTtd = $tanggal['bulan'] ?? '-';
-        $tahunTtd = $tanggal['tahun'] ?? '-';
-        $ttdText = strtoupper($kotaTtd) . ', ' . $tanggalTtd . ' ' . $bulanTtd . ' ' . $tahunTtd;
+        // Blok tanda tangan: kiri kosong, kanan tanda tangan
+        $kotaTtd = strtoupper($ct->kota_ttd ?? $data['branch']);
+        $ttdText = $kotaTtd . ', ' . ($tanggal['tanggal'] ?? '-') . ' ' . ($tanggal['bulan'] ?? '-') . ' ' . ($tanggal['tahun'] ?? '-');
 
-        $sigTable = $section->addTable(['borderSize' => 0]);
+        $sigTable = $section->addTable(['borderSize' => 0, 'cellPadding' => 80]);
         $sigTable->addRow();
-        $cell1 = $sigTable->addCell(5000);
-        $cell2 = $sigTable->addCell(5000);
-        $cell1->addText($ttdText, ['bold' => true]);
-        $cell1->addText('WASPANG');
-        $cell1->addText('PT TELKOM AKSES');
-        $cell1->addBreak();
-        $cell1->addBreak();
-        $cell1->addBreak();
-        $cell1->addText($waspang->name ?? '-', ['bold' => true]);
-        $cell1->addText('NIK : ' . ($waspang->nik ?? '-'));
-        // Kanan kosong untuk kop surat
+        $cellKiri = $sigTable->addCell(5000);
+        $cellKanan = $sigTable->addCell(5000);
 
-        // Add commissioning test images if any
+        // Kanan: tanda tangan
+        $cellKanan->addText($ttdText, ['bold' => true]);
+        $cellKanan->addText('WASPANG');
+        $cellKanan->addText('PT TELKOM AKSES');
+
+        // Gambar tanda tangan jika ada
         if ($ct->images && $ct->images->count() > 0) {
-            $section->addPageBreak();
-            $section->addText('LAMPIRAN DOKUMENTASI COMMISSIONING TEST', ['bold' => true, 'size' => 14], ['spaceAfter' => 200]);
-
-            foreach ($ct->images->chunk(3) as $chunk) {
-                $table = $section->addTable(['borderSize' => 2, 'borderColor' => '808080', 'cellPadding' => 60]);
-                $table->addRow();
-                
-                // Image row
-                foreach ($chunk as $foto) {
-                    $cell = $table->addCell(2200, ['valign' => 'center']);
-                    $fullPath = storage_path('app/public/' . $foto->file_path);
-                    if (file_exists($fullPath)) {
-                        try { 
-                            $cell->addImage($fullPath, ['width' => 150, 'height' => 150]); 
-                        } catch (\Throwable $e) { 
-                            $cell->addText('[Gambar error]'); 
-                        }
-                    } else {
-                        $cell->addText('[File tidak ditemukan]');
-                    }
+            $firstImage = $ct->images->first();
+            $fullPath = storage_path('app/public/' . $firstImage->file_path);
+            if (file_exists($fullPath)) {
+                try {
+                    $cellKanan->addImage($fullPath, ['width' => 120, 'height' => 60]);
+                } catch (\Throwable $e) {
+                    $cellKanan->addTextBreak(3);
                 }
-                
-                // Fill empty cells
-                for ($i = $chunk->count(); $i < 3; $i++) {
-                    $table->addCell(2200);
-                }
-
-                // Label row
-                $table->addRow();
-                foreach ($chunk as $foto) {
-                    $table->addCell(2200)->addText($foto->label ?? 'Dokumentasi', ['size' => 9]);
-                }
-                for ($i = $chunk->count(); $i < 3; $i++) {
-                    $table->addCell(2200);
-                }
-
-                // Signature row
-                $table->addRow();
-                foreach ($chunk as $foto) {
-                    $table->addCell(2200)->addText('PARAF', ['alignment' => Jc::CENTER]);
-                }
-                for ($i = $chunk->count(); $i < 3; $i++) {
-                    $table->addCell(2200);
-                }
+            } else {
+                $cellKanan->addTextBreak(3);
             }
+        } else {
+            $cellKanan->addTextBreak(3);
         }
+
+        $cellKanan->addText($waspang->name ?? '-', ['bold' => true]);
+        $cellKanan->addText('NIK : ' . ($waspang->nik ?? '-'));
     }
 
     // ===================================================================

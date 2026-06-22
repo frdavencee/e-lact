@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified', 'role:admin,petugas'])->group(function ()
         Route::post('commissioning-test', [CommissioningTestController::class, 'store'])->name('commissioning-test.store');
         Route::put('commissioning-test', [CommissioningTestController::class, 'update'])->name('commissioning-test.update');
         Route::delete('commissioning-test', [CommissioningTestController::class, 'destroy'])->name('commissioning-test.destroy');
+        Route::delete('commissioning-test/image/{image}', [CommissioningTestController::class, 'destroyImage'])->name('commissioning-test.image.destroy');
 
         Route::get('foto', [LokasiController::class, 'foto'])->name('lokasi.foto');
         Route::post('foto', [FotoLampiranController::class, 'store'])->name('foto.store');

@@ -44,29 +44,42 @@
         </div>
         <div class="col-12 mb-3">
             <hr>
-            <h6>Upload Dokumentasi Gambar</h6>
+            <h6>Upload Dokumentasi Gambar (Tanda Tangan)</h6>
+
+            {{-- Gambar yang sudah diupload --}}
+            @if($ct && $ct->images->count() > 0)
+            <div class="row mb-3">
+                @foreach($ct->images as $img)
+                <div class="col-md-3 mb-3">
+                    <div class="photo-tile-modern">
+                        <img src="{{ asset('storage/' . $img->file_path) }}" alt="{{ $img->label }}" style="width:100%; height:150px; object-fit:contain; background:#f8f8f8;">
+                        <div class="photo-overlay-modern">
+                            <small class="text-muted">{{ $img->label }}</small>
+                        </div>
+                        <form action="{{ route('commissioning-test.image.destroy', [$lokasi, $img]) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus gambar ini?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="photo-remove-btn">×</button>
+                        </form>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            {{-- Form upload gambar baru --}}
             <div id="image-uploads">
-                @if($ct && $ct->images->count() > 0)
-                    @foreach($ct->images as $img)
-                    <div class="image-upload-row mb-3 p-3 border rounded">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="form-label-soft">Gambar</label>
-                                <input type="file" name="images[]" class="form-control-soft" accept="image/*">
-                                @if($img->file_path)
-                                    <small class="text-muted d-block mt-1">
-                                        Gambar saat ini: <a href="{{ asset('storage/' . $img->file_path) }}" target="_blank">Lihat</a>
-                                    </small>
-                                @endif
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label-soft">Label/Keterangan</label>
-                                <input type="text" name="image_labels[]" class="form-control-soft" placeholder="Contoh: Dokumentasi Penarikan Kabel" value="{{ $img->label }}">
-                            </div>
+                <div class="image-upload-row mb-3 p-3 border rounded">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label-soft">Gambar</label>
+                            <input type="file" name="images[]" class="form-control-soft" accept="image/*">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-soft">Label/Keterangan</label>
+                            <input type="text" name="image_labels[]" class="form-control-soft" placeholder="Contoh: Tanda Tangan Waspang">
                         </div>
                     </div>
-                    @endforeach
-                @endif
+                </div>
             </div>
             <button type="button" class="btn btn-sm btn-outline-primary" onclick="addImageUpload()">+ Tambah Gambar</button>
         </div>
