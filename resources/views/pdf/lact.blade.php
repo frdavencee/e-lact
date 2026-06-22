@@ -618,7 +618,7 @@
         menyatakan bahwa seluruh dokumen Laporan Akhir Cabang Telekomunikasi (LACT) untuk proyek 
         <strong>{{ $project->name }}</strong> telah diperiksa dan diverifikasi kelengkapannya.
     </p>
-    @if($approval)
+    @if(isset($approval) && $approval)
     <table>
         <tr>
             <th width="150">Status</th>

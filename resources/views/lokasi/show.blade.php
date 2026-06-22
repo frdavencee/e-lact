@@ -7,10 +7,8 @@
     <h2>{{ $lokasi->code }} - {{ $lokasi->name }}</h2>
     <div class="d-flex gap-2 flex-wrap">
         <a href="{{ route('lokasi.edit', $lokasi) }}" class="btn-soft-secondary"><i class="bi bi-pencil"></i> Edit</a>
-        @if($lokasi->status === 'siap' || $lokasi->status === 'draft')
         <a href="{{ route('lokasi.generate', $lokasi) }}" class="btn-primary-gradient" onclick="return confirm('Generate DOCX untuk lokasi ini?')"><i class="bi bi-file-earmark-word"></i> Generate DOCX</a>
         <a href="{{ route('lokasi.generate.pdf', $lokasi) }}" class="btn-danger-gradient" onclick="return confirm('Generate PDF untuk lokasi ini?')"><i class="bi bi-file-earmark-pdf"></i> Generate PDF</a>
-        @endif
     </div>
 </div>
 
