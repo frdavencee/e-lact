@@ -1,5 +1,20 @@
 <h5>Data Commissioning Test</h5>
 @php $ct = $lokasi->commissioningTest; @endphp
+
+@if(session('success'))
+<div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if($errors->any())
+<div class="alert alert-danger">
+    <ul class="mb-0">
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
 <form method="POST" action="{{ $ct ? route('commissioning-test.update', $lokasi) : route('commissioning-test.store', $lokasi) }}" enctype="multipart/form-data">
     @csrf
     @if($ct) @method('PUT') @endif
@@ -15,7 +30,7 @@
         </div>
         <div class="col-md-4 mb-3">
             <label class="form-label-soft">Tanggal Commissioning</label>
-            <input type="date" name="tanggal" class="form-control-soft" required value="{{ old('tanggal', $ct->tanggal ?? '') }}">
+            <input type="date" name="tanggal" class="form-control-soft" required value="{{ old('tanggal', isset($ct) && $ct ? \Carbon\Carbon::parse($ct->tanggal)->format('Y-m-d') : '') }}">
         </div>
         <div class="col-md-4 mb-3">
             <label class="form-label-soft">Kota TTD</label>

@@ -13,8 +13,6 @@ class GeneratePdfController extends Controller
         $lokasi->load([
             'project.branchRelation',
             'project.waspangRelation',
-            'project.location',
-            'project.approval.reviewer',
             'commissioningTest.personel',
             'boqItems',
             'markingKabel',

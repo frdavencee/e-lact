@@ -20,8 +20,6 @@ class LactPdfService
         $lokasi = $this->lokasi->load([
             'project.branchRelation',
             'project.waspangRelation',
-            'project.location',
-            'project.approval.reviewer',
             'project.mancoreItems',
             'commissioningTest.personel',
             'commissioningTest.images',
@@ -68,7 +66,6 @@ class LactPdfService
             'evidencePhotos' => $lokasi->fotoLampiran->groupBy('kategori'),
             'opmRecords' => $lokasi->opmRecords,
             'otdrFiles' => $lokasi->otdrFiles,
-            'approval' => $project?->approval,
             'mancoreItems' => $project?->mancoreItems ?? collect(),
         ];
 

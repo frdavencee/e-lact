@@ -505,12 +505,12 @@ class LactDocumentService
 
             foreach ($pageChunk->chunk(3) as $chunk) {
                 // Baris foto
-                $fotoTable->addRow(['exactHeight' => 2200]);
+                $fotoTable->addRow(2200);
                 foreach ($chunk as $foto) {
                     $cell = $fotoTable->addCell(3333, ['valign' => 'center']);
                     $fullPath = storage_path('app/public/' . $foto->file_path);
                     if (file_exists($fullPath)) {
-                        try { $cell->addImage($fullPath, ['width' => 190, 'height' => 160, 'alignment' => Jc::CENTER]); }
+                        try { $cell->addImage($fullPath, ['width' => 190, 'height' => 160]); }
                         catch (\Throwable $e) { $cell->addText('[Gambar error]', ['size' => 9]); }
                     } else {
                         $cell->addText('[File tidak ditemukan]', ['size' => 9]);
@@ -704,7 +704,7 @@ class LactDocumentService
         $sigTable->addCell(2500)->addText($ttdText, ['size' => 9], ['alignment' => Jc::CENTER]);
 
         // Baris 3: ruang tanda tangan
-        $sigTable->addRow(['exactHeight' => 1200]);
+        $sigTable->addRow(1200);
         $sigTable->addCell(2500, ['valign' => 'bottom']);
         $sigTable->addCell(2500, ['valign' => 'bottom']);
 
