@@ -18,6 +18,7 @@ class Project extends Model
         'status',
         'notes',
         'user_id',
+        'waspang_id',
     ];
 
     protected $casts = [

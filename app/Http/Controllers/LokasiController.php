@@ -72,6 +72,7 @@ class LokasiController extends Controller
             'markingKabel',
             'fotoLampiran',
             'generateLogs',
+            'project.waspangRelation',
         ]);
 
         $personelList = \App\Models\Personel::orderBy('name')->get();

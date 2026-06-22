@@ -1125,11 +1125,6 @@
                     <i class="bi bi-file-earmark-word"></i> Dokumen
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                    <i class="bi bi-file-earmark-text"></i> Laporan
-                </a>
-            </li>
 
             <li class="nav-section">Master Data</li>
             <li class="nav-item">
