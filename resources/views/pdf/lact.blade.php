@@ -134,24 +134,20 @@
     </div>
 </div>
 
-<!-- PAGE 2: INDEX -->
+<!-- PAGE 2: DAFTAR ISI -->
 <div class="page">
-    <div class="doc-header">
-        <h3>DAFTAR ISI</h3>
+    <div style="text-align: center; padding-top: 80px;">
+        <h2 style="font-size: 16pt; font-weight: bold; margin-bottom: 6px;">DAFTAR ISI</h2>
+        <h3 style="font-size: 13pt; font-weight: bold; margin-bottom: 4px;">DOKUMEN LAPORAN COMMISIONING TEST</h3>
+        <h3 style="font-size: 13pt; font-weight: bold; margin-bottom: 0;">(LACT)</h3>
     </div>
-    <table>
-        <tr><th>No</th><th>Bab</th><th>Deskripsi</th><th>Halaman</th></tr>
-        <tr><td class="text-center">1</td><td>Commissioning Test</td><td>Hasil pemeriksaan Waspang</td><td class="text-center">3</td></tr>
-        <tr><td class="text-center">2</td><td>Bill of Quantity</td><td>Daftar item pekerjaan</td><td class="text-center">4-6</td></tr>
-        <tr><td class="text-center">3</td><td>Evidence Pekerjaan</td><td>Dokumentasi foto pekerjaan</td><td class="text-center">7-10</td></tr>
-        <tr><td class="text-center">4</td><td>Marking Kabel</td><td>Diagram marking kabel</td><td class="text-center">11</td></tr>
-        <tr><td class="text-center">5</td><td>Evidence ODP</td><td>Foto ODP & aksesoris</td><td class="text-center">12-14</td></tr>
-        <tr><td class="text-center">6</td><td>Evidence Closure</td><td>Foto closure & splitter</td><td class="text-center">15-16</td></tr>
-        <tr><td class="text-center">7</td><td>Hasil Ukur OPM</td><td>Data pengukuran ODP</td><td class="text-center">17-18</td></tr>
-        <tr><td class="text-center">8</td><td>Hasil Ukur OTDR</td><td>Grafik OTDR</td><td class="text-center">19-20</td></tr>
-        <tr><td class="text-center">9</td><td>Mancore</td><td>Data penyambungan core</td><td class="text-center">21</td></tr>
-        <tr><td class="text-center">10</td><td>Approval</td><td>Persetujuan Waspang</td><td class="text-center">22-23</td></tr>
-    </table>
+    <div style="margin-top: 60px; font-size: 12pt; line-height: 2.2;">
+        <p>1.&nbsp;&nbsp;&nbsp;Laporan Commisioning Test</p>
+        <p>2.&nbsp;&nbsp;&nbsp;Lampiran Bill Of Quantity</p>
+        <p>3.&nbsp;&nbsp;&nbsp;Hasil Ukur OPM &amp; OTDR (End To End Sesuai SOW)</p>
+        <p>4.&nbsp;&nbsp;&nbsp;Lampiran Mancore</p>
+        <p>5.&nbsp;&nbsp;&nbsp;Berita Acara Lapangan &amp; Dokumen Pendukung Lainnya</p>
+    </div>
 </div>
 
 <!-- PAGE 3: COMMISSIONING TEST -->
