@@ -15,6 +15,7 @@ class ProjectController extends Controller
             'contract_number'       => 'nullable|string|max:255',
             'purchase_order_number' => 'nullable|string|max:255',
             'implementer'           => 'nullable|string|max:255',
+            'pihak_pertama'         => 'nullable|string|max:255',
             'waspang_id'            => 'nullable|exists:waspangs,id',
         ]);
 
@@ -35,6 +36,7 @@ class ProjectController extends Controller
             'contract_number'       => 'nullable|string|max:255',
             'purchase_order_number' => 'nullable|string|max:255',
             'implementer'           => 'nullable|string|max:255',
+            'pihak_pertama'         => 'nullable|string|max:255',
             'waspang_id'            => 'nullable|exists:waspangs,id',
         ]);
 

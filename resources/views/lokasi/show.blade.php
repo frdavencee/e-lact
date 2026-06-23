@@ -61,6 +61,10 @@
                     <input type="text" name="implementer" class="form-control-soft" value="{{ old('implementer', $project->implementer ?? '') }}" placeholder="Nama Pelaksana">
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label-soft">Pihak Pertama (ANTARA)</label>
+                    <input type="text" name="pihak_pertama" class="form-control-soft" value="{{ old('pihak_pertama', $project->pihak_pertama ?? '') }}">
+                </div>
+                <div class="col-md-6">
                     <label class="form-label-soft">WASPANG</label>
                     <select name="waspang_id" class="form-select-soft">
                         <option value="">-- Pilih WASPANG --</option>

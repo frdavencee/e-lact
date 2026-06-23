@@ -15,6 +15,7 @@ class Project extends Model
         'branch_id',
         'location_id',
         'implementer',
+        'pihak_pertama',
         'status',
         'notes',
         'user_id',

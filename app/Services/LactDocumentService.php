@@ -173,7 +173,8 @@ class LactDocumentService
         // Spasi untuk kop surat
         $section->addTextBreak(6);
         $section->addText('ANTARA', ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-        $section->addText('PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.', ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
+        $pihakPertama = $project?->pihak_pertama ?? 'PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.';
+        $section->addText($pihakPertama, ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 100]);
         $section->addText('DENGAN', ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
         $section->addText($waspangName, ['bold' => true], ['alignment' => Jc::CENTER, 'spaceAfter' => 400]);
 

@@ -127,7 +127,7 @@
 
         <div style="margin-top: 40px; font-size: 12pt; line-height: 2;">
             <p style="font-weight: bold;">ANTARA</p>
-            <p style="font-weight: bold;">PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.</p>
+            <p style="font-weight: bold;">{{ $project->pihak_pertama ?? 'PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.' }}</p>
             <p style="font-weight: bold;">DENGAN</p>
             <p style="font-weight: bold;">{{ strtoupper($project->implementer ?? 'PT. TELKOM AKSES') }}</p>
         </div>
