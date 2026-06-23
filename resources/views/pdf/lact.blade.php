@@ -102,20 +102,34 @@
 
 <!-- PAGE 1: COVER -->
 <div class="page">
-    <div class="cover">
-        <h1>LAPORAN AKHIR CABANG<br>TELEKOMUNIKASI</h1>
-        <h2>LACT</h2>
-        
-        <div class="info">
-            <table>
-                <tr><td>Proyek</td><td>: {{ $project->name }}</td></tr>
-                <tr><td>Kontrak</td><td>: {{ $project->contract_number ?? '-' }}</td></tr>
-                <tr><td>Surat Pesanan</td><td>: {{ $project->purchase_order_number ?? '-' }}</td></tr>
-                <tr><td>Branch</td><td>: {{ strtoupper($project->branch->name ?? '-') }}</td></tr>
-                <tr><td>Lokasi</td><td>: {{ $project->location->code ?? '-' }} [{{ $project->location->name ?? '-' }}]</td></tr>
-                <tr><td>Pelaksana</td><td>: {{ $project->implementer ?? '-' }}</td></tr>
-                <tr><td>Tanggal</td><td>: {{ now()->format('d F Y') }}</td></tr>
-            </table>
+    <div style="text-align: center; padding-top: 60px;">
+        <h1 style="font-size: 20pt; font-weight: bold; margin-bottom: 40px;">LAPORAN COMMISSIONING TEST (LACT)</h1>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 11pt; text-align: left;">
+            <tr><td style="width: 160px; font-weight: bold; padding: 5px 0;">PROYEK</td><td style="padding: 5px 0;">: {{ $project->name ?? '-' }}</td></tr>
+            <tr><td style="font-weight: bold; padding: 5px 0;">KONTRAK</td><td style="padding: 5px 0;">: {{ $project->contract_number ?? '-' }}</td></tr>
+            <tr><td style="font-weight: bold; padding: 5px 0;">SURAT PESANAN</td><td style="padding: 5px 0;">: {{ $project->purchase_order_number ?? '-' }}</td></tr>
+            <tr><td style="font-weight: bold; padding: 5px 0;">BRANCH</td><td style="padding: 5px 0;">: {{ strtoupper($project->branch->name ?? '-') }}</td></tr>
+            <tr><td style="font-weight: bold; padding: 5px 0;">LOKASI</td><td style="padding: 5px 0;">: {{ $lokasi->name ?? '-' }} [{{ $lokasi->code ?? '-' }}]</td></tr>
+            <tr><td style="font-weight: bold; padding: 5px 0;">PELAKSANA</td><td style="padding: 5px 0;">: {{ $project->implementer ?? '-' }}</td></tr>
+        </table>
+
+        @php
+            $logoPath = public_path('images/logo.png');
+        @endphp
+        @if(file_exists($logoPath))
+        <div style="margin: 40px auto;">
+            <img src="file:///{{ str_replace('\\', '/', $logoPath) }}" style="max-width: 220px; max-height: 130px;">
+        </div>
+        @else
+        <div style="height: 100px;"></div>
+        @endif
+
+        <div style="margin-top: 40px; font-size: 12pt; line-height: 2;">
+            <p style="font-weight: bold;">ANTARA</p>
+            <p style="font-weight: bold;">PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.</p>
+            <p style="font-weight: bold;">DENGAN</p>
+            <p style="font-weight: bold;">{{ strtoupper($project->implementer ?? 'PT. TELKOM AKSES') }}</p>
         </div>
     </div>
 </div>
