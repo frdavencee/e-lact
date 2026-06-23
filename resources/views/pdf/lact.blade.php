@@ -145,6 +145,7 @@
     <div class="doc-header">
         <h3>BAB 1: COMMISSIONING TEST</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <div class="section-title">1.1 Identitas Pemeriksa (Waspang)</div>
     <table>
@@ -246,6 +247,7 @@
     <div class="doc-header">
         <h3>BAB 2: BILL OF QUANTITY (BOQ)</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <table>
         <thead>
@@ -293,6 +295,7 @@
     <div class="doc-header">
         <h3>BAB 2: BILL OF QUANTITY (BOQ) - Lanjutan</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     <table>
         <thead>
             <tr>
@@ -371,6 +374,7 @@
     <div class="doc-header">
         <h3>BAB 6: MARKING KABEL</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <table>
         <thead>
@@ -516,6 +520,7 @@
     <div class="doc-header">
         <h3>TANDA TANGAN PENGUKUR OPM</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <div class="signature-block">
         <table>
@@ -543,6 +548,7 @@
     <div class="doc-header">
         <h3>BAB 10: HASIL UKUR OTDR</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <div class=\"section-title\">10.1 Grafik OTDR ODP-PAT-FW/114</div>
     @php $files114 = $otdrFiles->filter(fn($f) => str_contains(strtolower($f->nama_file), '114')); @endphp
@@ -578,6 +584,7 @@
     <div class="doc-header">
         <h3>BAB 11: DATA MANCORE</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <div class=\"section-title\">11.1 Data Penyambungan Core di Closure</div>
     <table>
@@ -611,6 +618,7 @@
     <div class="doc-header">
         <h3>BAB 12: PERSETUJUAN WASPANG</h3>
     </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
     
     <div class=\"section-title\">12.1 Pernyataan Persetujuan</div>
     <p style="text-align: justify; margin: 20px 0;">
