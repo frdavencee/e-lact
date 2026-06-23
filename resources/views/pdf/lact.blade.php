@@ -141,12 +141,23 @@
         <h3 style="font-size: 13pt; font-weight: bold; margin-bottom: 4px;">DOKUMEN LAPORAN COMMISIONING TEST</h3>
         <h3 style="font-size: 13pt; font-weight: bold; margin-bottom: 0;">(LACT)</h3>
     </div>
+    @php
+        $tocItems = [];
+        $no = 1;
+        if (!empty($commissioning))
+            $tocItems[] = $no++ . '.   Laporan Commisioning Test';
+        if (!empty($boqItems) && $boqItems->count() > 0)
+            $tocItems[] = $no++ . '.   Lampiran Bill Of Quantity';
+        if ((!empty($opmRecords) && $opmRecords->count() > 0) || (!empty($otdrFiles) && $otdrFiles->count() > 0))
+            $tocItems[] = $no++ . '.   Hasil Ukur OPM & OTDR (End To End Sesuai SOW)';
+        if (!empty($mancoreItems) && $mancoreItems->count() > 0)
+            $tocItems[] = $no++ . '.   Lampiran Mancore';
+        $tocItems[] = $no++ . '.   Berita Acara Lapangan & Dokumen Pendukung Lainnya';
+    @endphp
     <div style="margin-top: 60px; font-size: 12pt; line-height: 2.2;">
-        <p>1.&nbsp;&nbsp;&nbsp;Laporan Commisioning Test</p>
-        <p>2.&nbsp;&nbsp;&nbsp;Lampiran Bill Of Quantity</p>
-        <p>3.&nbsp;&nbsp;&nbsp;Hasil Ukur OPM &amp; OTDR (End To End Sesuai SOW)</p>
-        <p>4.&nbsp;&nbsp;&nbsp;Lampiran Mancore</p>
-        <p>5.&nbsp;&nbsp;&nbsp;Berita Acara Lapangan &amp; Dokumen Pendukung Lainnya</p>
+        @foreach($tocItems as $item)
+        <p>{{ $item }}</p>
+        @endforeach
     </div>
 </div>
 
