@@ -364,32 +364,33 @@ class LactDocumentService
     // ===================================================================
     protected function addBoqTable($section, $boqItems): void
     {
-        $table = $section->addTable(['borderSize' => 4, 'borderColor' => '000000', 'cellPadding' => 80]);
-        $headers = ['No', 'Kode Item', 'Nama Item', 'Satuan', 'Volume', 'Keterangan'];
+        $table = $section->addTable(['borderSize' => 4, 'borderColor' => '000000', 'cellPadding' => 60]);
+        $headers = ['No', 'Kode Item', 'Nama Item', 'Satuan', 'DRM', 'Aktual', 'Tambah', 'Kurang', 'Keterangan'];
+        $widths  = [400, 1400, 2400, 700, 900, 900, 900, 900, 1800];
         $table->addRow();
-        foreach ($headers as $h) {
-            $table->addCell(1200)->addText($h, ['bold' => true]);
+        foreach ($headers as $i => $h) {
+            $table->addCell($widths[$i])->addText($h, ['bold' => true, 'size' => 9]);
         }
 
         $no = 1;
         foreach ($boqItems as $item) {
             $table->addRow();
-            $table->addCell(1200)->addText((string) $no++);
-            $table->addCell(2000)->addText($item->kode_item ?? '-');
-            $table->addCell(3000)->addText($item->nama_item ?? '-');
-            $table->addCell(1200)->addText($item->satuan ?? '-');
-            $table->addCell(1200)->addText((string) ($item->volume ?? '-'));
-            $table->addCell(3000)->addText($item->keterangan ?? '-');
+            $table->addCell($widths[0])->addText((string) $no++, ['size' => 9]);
+            $table->addCell($widths[1])->addText($item->kode_item ?? '-', ['size' => 9]);
+            $table->addCell($widths[2])->addText($item->nama_item ?? '-', ['size' => 9]);
+            $table->addCell($widths[3])->addText($item->satuan ?? '-', ['size' => 9]);
+            $table->addCell($widths[4])->addText((string) ($item->volume_drm ?? '-'), ['size' => 9]);
+            $table->addCell($widths[5])->addText((string) ($item->volume_aktual ?? '-'), ['size' => 9]);
+            $table->addCell($widths[6])->addText((string) ($item->volume_tambah ?? '-'), ['size' => 9]);
+            $table->addCell($widths[7])->addText((string) ($item->volume_kurang ?? '-'), ['size' => 9]);
+            $table->addCell($widths[8])->addText($item->keterangan ?? '-', ['size' => 9]);
         }
 
         if ($boqItems->count() === 0) {
             $table->addRow();
-            $table->addCell(1200)->addText('-');
-            $table->addCell(2000)->addText('-');
-            $table->addCell(3000)->addText('-');
-            $table->addCell(1200)->addText('-');
-            $table->addCell(1200)->addText('-');
-            $table->addCell(3000)->addText('-');
+            foreach ($widths as $w) {
+                $table->addCell($w)->addText('-', ['size' => 9]);
+            }
         }
     }
 
