@@ -16,6 +16,8 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\BranchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,6 +50,7 @@ Route::middleware(['auth', 'verified', 'role:admin,petugas'])->group(function ()
 
         Route::get('opm', [LokasiController::class, 'opm'])->name('lokasi.opm');
         Route::post('opm', [OpMController::class, 'store'])->name('opm.store');
+        Route::put('opm', [OpMController::class, 'bulkUpdate'])->name('opm.bulk-update');
         Route::put('opm/{opmRecord}', [OpMController::class, 'update'])->name('opm.update');
         Route::delete('opm/{opmRecord}', [OpMController::class, 'destroy'])->name('opm.destroy');
 
@@ -62,6 +65,7 @@ Route::middleware(['auth', 'verified', 'role:admin,petugas'])->group(function ()
 
         Route::get('marking-kabel', [LokasiController::class, 'marking'])->name('lokasi.marking');
         Route::post('marking-kabel', [MarkingKabelController::class, 'store'])->name('marking-kabel.store');
+        Route::put('marking-kabel', [MarkingKabelController::class, 'bulkUpdate'])->name('marking-kabel.bulk-update');
         Route::delete('marking-kabel/{markingKabel}', [MarkingKabelController::class, 'destroy'])->name('marking-kabel.destroy');
 
         Route::post('project', [ProjectController::class, 'store'])->name('project.store');
@@ -75,6 +79,14 @@ Route::middleware(['auth', 'verified', 'role:admin,petugas'])->group(function ()
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('settings/logo', [SettingsController::class, 'uploadLogo'])->name('settings.logo');
+
+    Route::get('branch', [BranchController::class, 'index'])->name('branch.index');
+    Route::post('branch', [BranchController::class, 'store'])->name('branch.store');
+    Route::put('branch/{branch}', [BranchController::class, 'update'])->name('branch.update');
+    Route::delete('branch/{branch}', [BranchController::class, 'destroy'])->name('branch.destroy');
 });
 
 require __DIR__.'/auth.php';

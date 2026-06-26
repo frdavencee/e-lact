@@ -22,14 +22,19 @@
                     <option value="generated" {{ request('status') == 'generated' ? 'selected' : '' }}>Sudah Generate</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <input type="text" name="search" class="form-control-soft" placeholder="Cari..." value="{{ request('search') }}">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control-soft" placeholder="Cari kode / nama lokasi..." value="{{ request('search') }}">
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn-primary-gradient w-100">
                     <i class="bi bi-funnel"></i> Filter
                 </button>
             </div>
+            @if(request('search') || request('status'))
+            <div class="col-md-1">
+                <a href="{{ route('lokasi.index') }}" class="btn-soft-secondary w-100">Reset</a>
+            </div>
+            @endif
         </form>
     </div>
 </div>
@@ -39,8 +44,10 @@
         <table class="table-modern">
             <thead>
                 <tr>
-                    <th>Kode Lokasi</th>
+                    <th>Kode</th>
                     <th>Nama Lokasi</th>
+                    <th>Branch</th>
+                    <th>Proyek</th>
                     <th>Status</th>
                     <th width="100">Aksi</th>
                 </tr>
@@ -48,8 +55,12 @@
             <tbody>
                 @forelse($lokasiList as $lokasi)
                 <tr>
-                    <td><strong style="color: #1f2937;">{{ $lokasi->code }}</strong></td>
+                    <td><strong class="input-mono" style="font-size:0.85rem;">{{ $lokasi->code }}</strong></td>
                     <td>{{ $lokasi->name }}</td>
+                    <td>{{ $lokasi->branch->name ?? '-' }}</td>
+                    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                        {{ $lokasi->project->name ?? '-' }}
+                    </td>
                     <td>
                         @php
                             $badgeClass = match($lokasi->status) {
@@ -66,12 +77,16 @@
                         <div class="action-group">
                             <a href="{{ route('lokasi.show', $lokasi) }}" class="action-icon-btn btn-view" title="Detail"><i class="bi bi-eye"></i></a>
                             <a href="{{ route('lokasi.edit', $lokasi) }}" class="action-icon-btn btn-edit" title="Edit"><i class="bi bi-pencil"></i></a>
+                            <form action="{{ route('lokasi.destroy', $lokasi) }}" method="POST" onsubmit="return confirm('Hapus lokasi ini?')" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button class="action-icon-btn btn-delete" type="submit" title="Hapus"><i class="bi bi-trash"></i></button>
+                            </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4">
+                    <td colspan="6">
                         <div class="empty-state">
                             <i class="bi bi-folder2-open"></i>
                             <p>Tidak ada data lokasi</p>

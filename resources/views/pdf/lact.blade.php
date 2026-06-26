@@ -453,7 +453,7 @@
         <h3>BAB 7: LAMPIRAN EVIDENCE OPM & OTDR</h3>
     </div>
     @php renderPhotoMetaTable($projectMeta); @endphp
-    @php $photos = $evidencePhotos->get('opm_otdr', collect()); @endphp
+    @php $photos = $evidencePhotos->get('opm_hasil_ukur', $evidencePhotos->get('opm_otdr', collect())); @endphp
     {!! renderPhotoGrid($photos, 6) !!}
 </div>
 

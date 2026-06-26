@@ -40,26 +40,31 @@ class BoqController extends Controller
     public function globalStore(Request $request)
     {
         $validated = $request->validate([
-            'lokasi_id' => 'required|exists:locations,id',
-            'kode_item' => 'nullable|string|max:80',
-            'nama_item' => 'required|string|max:255',
-            'volume' => 'required|numeric|min:0',
-            'satuan' => 'required|string|max:50',
-            'keterangan' => 'nullable|string|max:500',
+            'lokasi_id'    => 'required|exists:locations,id',
+            'kode_item'    => 'nullable|string|max:80',
+            'nama_item'    => 'required|string|max:255',
+            'satuan'       => 'required|string|max:50',
+            'volume_drm'   => 'nullable|numeric|min:0',
+            'volume_aktual' => 'nullable|numeric|min:0',
+            'volume_tambah' => 'nullable|numeric|min:0',
+            'volume_kurang' => 'nullable|numeric|min:0',
+            'keterangan'   => 'nullable|string|max:500',
         ]);
 
         \App\Models\Lokasi::findOrFail($validated['lokasi_id'])->boqItems()->create([
-            'item_code' => $validated['kode_item'],
-            'name' => $validated['nama_item'],
-            'volume' => $validated['volume'],
-            'unit' => $validated['satuan'],
-            'price' => 0,
-            'total' => 0,
-            'notes' => $validated['keterangan'],
+            'item_code'    => $validated['kode_item'],
+            'name'         => $validated['nama_item'],
+            'unit'         => $validated['satuan'],
+            'volume_drm'   => $validated['volume_drm'] ?? null,
+            'volume_aktual' => $validated['volume_aktual'] ?? null,
+            'volume_tambah' => $validated['volume_tambah'] ?? null,
+            'volume_kurang' => $validated['volume_kurang'] ?? null,
+            'notes'        => $validated['keterangan'],
+            'price'        => 0,
+            'total'        => 0,
         ]);
 
-        return redirect()->route('boq.index')
-            ->with('success', 'Item BOQ berhasil ditambahkan.');
+        return redirect()->route('boq.index')->with('success', 'Item BOQ berhasil ditambahkan.');
     }
 
     public function index(Lokasi $lokasi)
@@ -75,43 +80,43 @@ class BoqController extends Controller
 
     public function store(Request $request, Lokasi $lokasi)
     {
-        $validated = $request->validate([
-            'kode_item' => 'nullable|string|max:80',
-            'nama_item' => 'required|string|max:255',
-            'volume' => 'required|numeric|min:0',
-            'satuan' => 'required|string|max:50',
-            'keterangan' => 'nullable|string|max:500',
-        ]);
+        $rows = $request->input('boq', []);
 
-        $lokasi->boqItems()->create([
-            'item_code' => $validated['kode_item'],
-            'name' => $validated['nama_item'],
-            'volume' => $validated['volume'],
-            'unit' => $validated['satuan'],
-            'price' => 0,
-            'total' => 0,
-            'notes' => $validated['keterangan'],
-        ]);
+        $lokasi->boqItems()->delete();
 
-        return back()->with('success', 'Item BOQ berhasil ditambahkan.');
+        foreach ($rows as $row) {
+            if (empty(trim($row['nama_item'] ?? ''))) continue;
+            $lokasi->boqItems()->create([
+                'item_code'    => $row['kode_item'] ?? null,
+                'name'         => $row['nama_item'],
+                'unit'         => $row['satuan'] ?? null,
+                'volume_drm'   => is_numeric($row['volume_drm'] ?? '') ? (float) $row['volume_drm'] : null,
+                'volume_aktual' => is_numeric($row['volume_aktual'] ?? '') ? (float) $row['volume_aktual'] : null,
+                'volume_tambah' => is_numeric($row['volume_tambah'] ?? '') ? (float) $row['volume_tambah'] : null,
+                'volume_kurang' => is_numeric($row['volume_kurang'] ?? '') ? (float) $row['volume_kurang'] : null,
+                'notes'        => $row['keterangan'] ?? null,
+                'price'        => 0,
+                'total'        => 0,
+            ]);
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+        return back()->with('success', 'BOQ berhasil disimpan.');
     }
 
     public function update(Request $request, Lokasi $lokasi, BoqItem $boq)
     {
-        $validated = $request->validate([
-            'kode_item' => 'nullable|string|max:80',
-            'nama_item' => 'required|string|max:255',
-            'volume' => 'required|numeric|min:0',
-            'satuan' => 'required|string|max:50',
-            'keterangan' => 'nullable|string|max:500',
-        ]);
-
         $boq->update([
-            'item_code' => $validated['kode_item'],
-            'name' => $validated['nama_item'],
-            'volume' => $validated['volume'],
-            'unit' => $validated['satuan'],
-            'notes' => $validated['keterangan'],
+            'item_code'    => $request->input('kode_item'),
+            'name'         => $request->input('nama_item'),
+            'unit'         => $request->input('satuan'),
+            'volume_drm'   => $request->input('volume_drm'),
+            'volume_aktual' => $request->input('volume_aktual'),
+            'volume_tambah' => $request->input('volume_tambah'),
+            'volume_kurang' => $request->input('volume_kurang'),
+            'notes'        => $request->input('keterangan'),
         ]);
 
         return back()->with('success', 'Item BOQ berhasil diperbarui.');
@@ -120,7 +125,6 @@ class BoqController extends Controller
     public function destroy(Lokasi $lokasi, BoqItem $boq)
     {
         $boq->delete();
-
         return back()->with('success', 'Item BOQ berhasil dihapus.');
     }
 }

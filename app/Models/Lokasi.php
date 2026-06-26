@@ -65,14 +65,14 @@ class Lokasi extends Model
         return $this->hasOne(Project::class, 'location_id');
     }
 
-    public function opmRecords(): HasManyThrough
+    public function opmRecords(): HasMany
     {
-        return $this->hasManyThrough(OpMRecord::class, Project::class, 'location_id', 'project_id', 'id', 'id');
+        return $this->hasMany(OpMRecord::class, 'lokasi_id');
     }
 
-    public function otdrFiles(): HasManyThrough
+    public function otdrFiles(): HasMany
     {
-        return $this->hasManyThrough(OtdrFile::class, Project::class, 'location_id', 'project_id', 'id', 'id');
+        return $this->hasMany(OtdrFile::class, 'lokasi_id');
     }
 
     public function waspang(): HasOneThrough

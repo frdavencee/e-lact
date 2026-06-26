@@ -18,6 +18,10 @@ class BoqItem extends Model
         'price',
         'total',
         'notes',
+        'volume_drm',
+        'volume_aktual',
+        'volume_tambah',
+        'volume_kurang',
     ];
 
     protected function kodeItem(): Attribute
@@ -43,5 +47,10 @@ class BoqItem extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function lokasi(): BelongsTo
+    {
+        return $this->belongsTo(Lokasi::class, 'lokasi_id');
     }
 }

@@ -23,7 +23,7 @@ class LokasiController extends Controller
             });
         }
 
-        $lokasiList = $query->latest()->paginate(10);
+        $lokasiList = $query->with(['branch', 'project'])->latest()->paginate(10);
 
         return view('lokasi.index', compact('lokasiList'));
     }
@@ -68,11 +68,14 @@ class LokasiController extends Controller
     {
         $lokasi->load([
             'commissioningTest.personel',
+            'commissioningTest.images',
             'boqItems',
             'markingKabel',
             'fotoLampiran',
             'generateLogs',
             'project.waspangRelation',
+            'opmRecords',
+            'otdrFiles',
         ]);
 
         $personelList = \App\Models\Personel::orderBy('name')->get();

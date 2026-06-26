@@ -12,6 +12,7 @@ class OpMRecord extends Model
 
     protected $fillable = [
         'project_id',
+        'lokasi_id',
         'scan',
         'odp_name',
         'port_1',
@@ -49,5 +50,10 @@ class OpMRecord extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function lokasi(): BelongsTo
+    {
+        return $this->belongsTo(Lokasi::class, 'lokasi_id');
     }
 }

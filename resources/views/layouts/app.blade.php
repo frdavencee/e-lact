@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'e-LACT Telkom')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -1133,6 +1134,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('branch.*') ? 'active' : '' }}" href="{{ route('branch.index') }}">
+                    <i class="bi bi-diagram-3"></i> Branch
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('waspang.*') ? 'active' : '' }}" href="{{ route('waspang.index') }}">
                     <i class="bi bi-person-badge"></i> Waspang
                 </a>
@@ -1151,6 +1157,13 @@
                     <i class="bi bi-person-circle"></i> Profile
                 </a>
             </li>
+            @if(Auth::user()?->role === 'admin')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="{{ route('settings.index') }}">
+                    <i class="bi bi-gear"></i> Pengaturan
+                </a>
+            </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="bi bi-box-arrow-right"></i> Logout

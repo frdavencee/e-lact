@@ -12,20 +12,15 @@ class OtdrController extends Controller
     public function store(Request $request, Lokasi $lokasi)
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file'     => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'odp_name' => 'required|string|max:150',
         ]);
-
-        $project = $lokasi->project;
-        if (!$project) {
-            return back()->with('error', 'Lokasi belum memiliki project.');
-        }
 
         $file = $request->file('file');
         $path = $file->store('otdr', 'public');
 
         OtdrFile::create([
-            'project_id'    => $project->id,
+            'lokasi_id'     => $lokasi->id,
             'file_path'     => $path,
             'original_name' => $file->getClientOriginalName(),
             'mime_type'     => $file->getMimeType(),

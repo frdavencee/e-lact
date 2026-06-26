@@ -12,6 +12,7 @@ class OtdrFile extends Model
 
     protected $fillable = [
         'project_id',
+        'lokasi_id',
         'odp_name',
         'file_path',
         'original_name',
@@ -37,5 +38,10 @@ class OtdrFile extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function lokasi(): BelongsTo
+    {
+        return $this->belongsTo(Lokasi::class, 'lokasi_id');
     }
 }

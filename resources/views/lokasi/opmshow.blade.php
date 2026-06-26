@@ -16,75 +16,55 @@
 </ul>
 
 <div class="tab-content-modern">
+
     {{-- TAB OPM --}}
     <div class="tab-pane fade show active" id="tab-opm">
-        <div class="detail-card mt-3">
-            <div class="detail-card-header">
-                <h5>Tambah Data OPM</h5>
-            </div>
-            <div class="detail-card-body">
-                <form method="POST" action="{{ route('opm.store', $lokasi) }}" class="row g-2">
-                    @csrf
-                    <div class="col-md-3">
-                        <label class="form-label-soft">Nama ODP</label>
-                        <input type="text" name="odp_name" class="form-control-soft input-mono" placeholder="ODP-PAT-FW/114" required>
-                    </div>
-                    @for($p = 1; $p <= 8; $p++)
-                    <div class="col-md-1">
-                        <label class="form-label-soft">Port {{ $p }}</label>
-                        <input type="number" step="0.01" name="port_{{ $p }}" class="form-control-soft input-mono" placeholder="-15.00">
-                    </div>
-                    @endfor
-                    <div class="col-md-2">
-                        <label class="form-label-soft">Catatan</label>
-                        <input type="text" name="notes" class="form-control-soft" placeholder="Opsional">
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn-primary-gradient"><i class="bi bi-plus"></i> Tambah OPM</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <div id="opm-msg" style="display:none;" class="alert-custom mb-3"></div>
 
         <div class="detail-card mt-3">
             <div class="detail-card-header">
                 <h5>Data Pengukuran OPM</h5>
-                <span class="badge-modern badge-info">{{ $opmRecords->count() }} pengukuran</span>
+                <div class="d-flex gap-2">
+                    <button type="button" onclick="addOpmRow()" class="btn-soft-secondary btn-sm">
+                        <i class="bi bi-plus"></i> Tambah ODP
+                    </button>
+                    <button type="button" onclick="saveOpmData()" class="btn-primary-gradient btn-sm">
+                        <i class="bi bi-save"></i> Simpan Data OPM
+                    </button>
+                </div>
             </div>
             <div class="detail-card-body">
                 <div class="table-responsive">
-                    <table class="table-modern">
+                    <table class="table-modern" id="opm-table" style="min-width:900px;">
                         <thead>
                             <tr>
-                                <th>ODP Name</th>
-                                <th>Port 1</th><th>Port 2</th><th>Port 3</th><th>Port 4</th>
-                                <th>Port 5</th><th>Port 6</th><th>Port 7</th><th>Port 8</th>
+                                <th>Nama ODP</th>
+                                <th style="text-align:center;">P1</th>
+                                <th style="text-align:center;">P2</th>
+                                <th style="text-align:center;">P3</th>
+                                <th style="text-align:center;">P4</th>
+                                <th style="text-align:center;">P5</th>
+                                <th style="text-align:center;">P6</th>
+                                <th style="text-align:center;">P7</th>
+                                <th style="text-align:center;">P8</th>
                                 <th>Catatan</th>
-                                <th width="60"></th>
+                                <th width="40"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="opm-tbody">
                             @forelse($opmRecords as $opm)
                             <tr>
-                                <td><strong>{{ $opm->odp_name }}</strong></td>
-                                <td>{{ $opm->port_1 ?? '-' }}</td>
-                                <td>{{ $opm->port_2 ?? '-' }}</td>
-                                <td>{{ $opm->port_3 ?? '-' }}</td>
-                                <td>{{ $opm->port_4 ?? '-' }}</td>
-                                <td>{{ $opm->port_5 ?? '-' }}</td>
-                                <td>{{ $opm->port_6 ?? '-' }}</td>
-                                <td>{{ $opm->port_7 ?? '-' }}</td>
-                                <td>{{ $opm->port_8 ?? '-' }}</td>
-                                <td>{{ $opm->notes ?? '-' }}</td>
-                                <td>
-                                    <form action="{{ route('opm.destroy', [$lokasi, $opm]) }}" method="POST" onsubmit="return confirm('Hapus?')">
-                                        @csrf @method('DELETE')
-                                        <button class="action-icon-btn btn-delete"><i class="bi bi-trash"></i></button>
-                                    </form>
-                                </td>
+                                <td><input type="text" class="form-control-soft input-mono" style="padding:0.4rem 0.5rem;font-size:0.8rem;min-width:130px;" value="{{ $opm->odp_name }}"></td>
+                                @for($p = 1; $p <= 8; $p++)
+                                <td><input type="text" class="form-control-soft input-mono" style="padding:0.4rem 0.3rem;font-size:0.8rem;width:60px;text-align:center;" value="{{ $opm->{'port_'.$p} ?? '' }}"></td>
+                                @endfor
+                                <td><input type="text" class="form-control-soft" style="padding:0.4rem 0.5rem;font-size:0.8rem;min-width:100px;" value="{{ $opm->notes ?? '' }}"></td>
+                                <td><button type="button" class="btn-danger-sm" onclick="this.closest('tr').remove()">×</button></td>
                             </tr>
                             @empty
-                            <tr><td colspan="11"><div class="empty-state"><i class="bi bi-bar-chart"></i><p>Belum ada data OPM.</p></div></td></tr>
+                            <tr id="empty-row">
+                                <td colspan="11"><div class="empty-state"><i class="bi bi-bar-chart"></i><p>Belum ada data OPM. Klik "Tambah ODP" untuk mulai.</p></div></td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -153,3 +133,75 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+const CSRF_OPM = '{{ csrf_token() }}';
+const LOKASI_ID_OPM = {{ $lokasi->id }};
+
+function addOpmRow() {
+    const emptyRow = document.getElementById('empty-row');
+    if (emptyRow) emptyRow.remove();
+
+    const tbody = document.getElementById('opm-tbody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td><input type="text" class="form-control-soft input-mono" style="padding:0.4rem 0.5rem;font-size:0.8rem;min-width:130px;" placeholder="ODP-XXX-FW/001"></td>
+        ${[1,2,3,4,5,6,7,8].map(() =>
+            `<td><input type="text" class="form-control-soft input-mono" style="padding:0.4rem 0.3rem;font-size:0.8rem;width:60px;text-align:center;" placeholder="-"></td>`
+        ).join('')}
+        <td><input type="text" class="form-control-soft" style="padding:0.4rem 0.5rem;font-size:0.8rem;min-width:100px;"></td>
+        <td><button type="button" class="btn-danger-sm" onclick="this.closest('tr').remove()">×</button></td>
+    `;
+    tbody.appendChild(tr);
+    tr.querySelector('input').focus();
+}
+
+function showOpmMsg(text, success) {
+    const el = document.getElementById('opm-msg');
+    el.className = 'alert-custom mb-3 ' + (success ? 'alert-success-custom' : 'alert-error-custom');
+    el.textContent = text;
+    el.style.display = 'flex';
+    setTimeout(() => { el.style.display = 'none'; }, 3500);
+}
+
+function saveOpmData() {
+    const rows = Array.from(document.querySelectorAll('#opm-tbody tr'));
+    const items = [];
+
+    for (const row of rows) {
+        if (row.id === 'empty-row') continue;
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length < 10) continue;
+        const odp = inputs[0].value.trim();
+        if (!odp) continue;
+        items.push({
+            odp_name: odp,
+            port_1: inputs[1].value,
+            port_2: inputs[2].value,
+            port_3: inputs[3].value,
+            port_4: inputs[4].value,
+            port_5: inputs[5].value,
+            port_6: inputs[6].value,
+            port_7: inputs[7].value,
+            port_8: inputs[8].value,
+            notes:  inputs[9].value,
+        });
+    }
+
+    showOpmMsg('Menyimpan...', true);
+
+    fetch('/lokasi/' + LOKASI_ID_OPM + '/opm', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': CSRF_OPM,
+        },
+        body: JSON.stringify({ items }),
+    })
+    .then(r => r.json())
+    .then(d => showOpmMsg(d.success ? 'Data OPM berhasil disimpan.' : 'Gagal menyimpan.', !!d.success))
+    .catch(() => showOpmMsg('Gagal menyimpan data OPM.', false));
+}
+</script>
+@endpush
