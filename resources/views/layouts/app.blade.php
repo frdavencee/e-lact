@@ -43,11 +43,9 @@
             left: 0;
             bottom: 0;
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-            padding: 0;
-            z-index: 1040;
-            transition: var(--transition);
-            box-shadow: var(--shadow-lg);
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
         }
@@ -59,18 +57,17 @@
         }
 
         .sidebar-brand h4 {
-            color: #fff;
+            color: var(--primary);
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             letter-spacing: -0.02em;
             margin: 0;
         }
 
         .sidebar-brand small {
-            color: rgba(255,255,255,0.5);
+            color: #6b7280;
             font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .sidebar-nav {
@@ -86,7 +83,7 @@
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: rgba(255,255,255,0.35);
+            color: #9ca3af;
             font-weight: 600;
         }
 
@@ -108,31 +105,24 @@
         }
 
         .sidebar-nav .nav-link:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.08);
-            transform: translateX(4px);
+            color: #111827;
+            background: #f9fafb;
+            transform: none;
         }
 
         .sidebar-nav .nav-link.active {
-            color: #fff;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            box-shadow: 0 4px 12px rgba(227, 0, 15, 0.3);
+            color: var(--primary);
+            background: #fee2e2;
+            box-shadow: none;
         }
 
-        .sidebar-nav .nav-link.active i { color: #fff; }
-        
-        .sidebar-nav .nav-link i {
-            font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
-            opacity: 0.8;
-        }
+        .sidebar-nav .nav-link.active i { color: var(--primary); }
 
-        .sidebar-nav .nav-link.active i { opacity: 1; }
+        .sidebar-nav .nav-link i { color: currentColor; }
 
         .sidebar-footer {
-            padding: 1rem 1.25rem;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #e5e7eb;
         }
 
         /* Main Content */
@@ -1115,22 +1105,19 @@
             <small>Telkom Indonesia</small>
         </div>
         <ul class="sidebar-nav">
-            <li class="nav-section">Menu Utama</li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('documents.*') ? 'active' : '' }}" href="{{ route('documents.index') }}">
-                    <i class="bi bi-file-earmark-word"></i> Dokumen
-                </a>
-            </li>
-
-            <li class="nav-section">Master Data</li>
-            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('lokasi.*') ? 'active' : '' }}" href="{{ route('lokasi.index') }}">
                     <i class="bi bi-geo-alt"></i> Lokasi
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('waspang.*') ? 'active' : '' }}" href="{{ route('waspang.index') }}">
+                    <i class="bi bi-people"></i> Personel
                 </a>
             </li>
             <li class="nav-item">
@@ -1138,39 +1125,38 @@
                     <i class="bi bi-diagram-3"></i> Branch
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('waspang.*') ? 'active' : '' }}" href="{{ route('waspang.index') }}">
-                    <i class="bi bi-person-badge"></i> Waspang
-                </a>
-            </li>
             @if(Auth::user()?->role === 'admin')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                    <i class="bi bi-person-gear"></i> Users
+                    <i class="bi bi-person-gear"></i> Manajemen User
                 </a>
             </li>
-            @endif
-
-            <li class="nav-section">Akun</li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}">
-                    <i class="bi bi-person-circle"></i> Profile
-                </a>
-            </li>
-            @if(Auth::user()?->role === 'admin')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="{{ route('settings.index') }}">
-                    <i class="bi bi-gear"></i> Pengaturan
+                    <i class="bi bi-gear"></i> Logo Perusahaan
                 </a>
             </li>
             @endif
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="bi bi-box-arrow-right"></i> Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
-            </li>
         </ul>
+
+        <div class="sidebar-footer">
+            <a class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}"
+               href="{{ route('profile.edit') }}"
+               style="display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;border-radius:8px;text-decoration:none;margin-bottom:4px;">
+                <i class="bi bi-person-circle" style="font-size:1.1rem;flex-shrink:0;"></i>
+                <div style="flex:1;min-width:0;overflow:hidden;">
+                    <p style="margin:0;font-size:0.83rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ Auth::user()->name }}</p>
+                    <p style="margin:0;font-size:0.71rem;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ Auth::user()->email }}</p>
+                </div>
+            </a>
+            <a class="nav-link" href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+               style="display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;border-radius:8px;text-decoration:none;">
+                <i class="bi bi-box-arrow-right" style="font-size:1rem;"></i>
+                <span style="font-size:0.875rem;font-weight:500;">Keluar</span>
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+        </div>
     </nav>
     @endif
 
@@ -1178,13 +1164,13 @@
     <div class="main-wrapper">
         @if(Auth::check())
         <header class="top-header">
-            <h2 class="page-title">@yield('title')</h2>
-            <div class="d-flex align-items-center gap-3">
-                <span class="user-badge">
+            <p style="font-size:0.85rem;color:#9ca3af;margin:0;">Sistem Manajemen Dokumen LACT</p>
+            <div class="d-flex align-items-center gap-2">
+                <span class="user-badge" style="font-size:0.75rem;padding:0.3rem 0.7rem;">
                     <i class="bi bi-shield-check"></i>
                     <span>{{ ucfirst(Auth::user()->role) }}</span>
                 </span>
-                <span class="fw-medium">{{ Auth::user()->name }}</span>
+                <span style="font-size:0.85rem;color:#4b5563;font-weight:500;">{{ Auth::user()->name }}</span>
             </div>
         </header>
         @endif
