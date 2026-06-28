@@ -525,7 +525,7 @@
 
     @foreach($files as $otdr)
     @php
-        $otdrPath = str_replace('\', '/', storage_path('app/public/' . $otdr->file_path));
+        $otdrPath = str_replace('\\', '/', storage_path('app/public/' . $otdr->file_path));
         $ext = strtolower(pathinfo($otdr->original_name ?? $otdr->file_path, PATHINFO_EXTENSION));
         $isImg = in_array($ext, ['jpg', 'jpeg', 'png']);
         $otdrSrc = file_exists($otdrPath) ? 'file:///' . $otdrPath : '';
