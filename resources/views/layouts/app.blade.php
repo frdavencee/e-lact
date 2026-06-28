@@ -94,7 +94,7 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1rem;
-            color: rgba(255,255,255,0.7);
+            color: #4b5563;
             text-decoration: none;
             border-radius: var(--radius-sm);
             margin: 0.15rem 0;
