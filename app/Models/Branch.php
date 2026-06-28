@@ -17,6 +17,11 @@ class Branch extends Model
         return $this->hasMany(Lokasi::class);
     }
 
+    public function lokasi(): HasMany
+    {
+        return $this->hasMany(Lokasi::class);
+    }
+
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
