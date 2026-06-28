@@ -21,7 +21,4 @@
     </div>
     <button type="submit" class="btn-primary-gradient w-100">Masuk</button>
 </form>
-<div class="text-center mt-3">
-    <small class="text-muted">Demo: admin@telkom.co.id / password</small>
-</div>
 @endsection
