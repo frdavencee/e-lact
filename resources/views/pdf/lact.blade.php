@@ -7,8 +7,8 @@
 body { font-family:'Times New Roman',serif; font-size:11pt; line-height:1.5; color:#000; }
 .page { page-break-after:always; padding:40px 50px; }
 .page:last-child { page-break-after:auto; }
-table { width:100%; border-collapse:collapse; margin:10px 0; font-size:10pt; }
-th,td { border:1px solid #000; padding:5px 7px; vertical-align:top; text-align:left; }
+table { width:100%; border-collapse:collapse; margin:10px 0; font-size:9pt; }
+th,td { border:1px solid #000; padding:4px; vertical-align:top; text-align:left; }
 th { background:#f0f0f0; font-weight:bold; text-align:center; }
 .no-border td { border:none; padding:3px 0; }
 .section-title { font-size:14pt; font-weight:bold; text-align:center; margin-bottom:12px; padding-bottom:5px; border-bottom:1px solid #000; }
@@ -229,14 +229,14 @@ $tocItems[] = $no++ . '.   Berita Acara Lapangan & Dokumen Pendukung Lainnya';
     <table>
         <thead>
             <tr>
-                <th width="35">No</th>
-                <th width="85">Kode Item</th>
+                <th width="30">No</th>
+                <th width="120">Kode Item</th>
                 <th>Nama Item</th>
-                <th width="55">Satuan</th>
-                <th width="58">DRM</th>
-                <th width="58">Aktual</th>
-                <th width="58">Tambah</th>
-                <th width="58">Kurang</th>
+                <th width="40">Satuan</th>
+                <th width="40">DRM</th>
+                <th width="40">Aktual</th>
+                <th width="40">Tambah</th>
+                <th width="40">Kurang</th>
             </tr>
         </thead>
         <tbody>
