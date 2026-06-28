@@ -1,653 +1,340 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Laporan Akhir Cabang Telekomunikasi (LACT)</title>
-    <style>
-        body { font-family: 'Times New Roman', serif; font-size: 11pt; line-height: 1.4; color: #000; }
-        .page { page-break-after: always; padding: 40px; }
-        .page:last-child { page-break-after: auto; }
-        
-        /* Cover Page */
-        .cover { text-align: center; padding-top: 100px; }
-        .cover h1 { font-size: 24pt; font-weight: bold; margin-bottom: 10px; }
-        .cover h2 { font-size: 18pt; margin-bottom: 50px; }
-        .cover .info { text-align: left; margin-top: 80px; font-size: 12pt; }
-        .cover .info table { width: 100%; border-collapse: collapse; }
-        .cover .info td { padding: 8px 0; vertical-align: top; }
-        .cover .info td:first-child { width: 200px; font-weight: bold; }
-        
-        /* Commissioning Page */
-        .signature-block { margin-top: 60px; }
-        .signature-block table { width: 100%; }
-        .signature-block td { width: 50%; vertical-align: top; padding: 20px; }
-        .signature-line { border-bottom: 1px solid #000; height: 60px; margin-bottom: 10px; }
-        
-        /* Tables */
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
-        th, td { border: 1px solid #000; padding: 6px 8px; vertical-align: top; text-align: left; }
-        th { background-color: #f0f0f0; font-weight: bold; text-align: center; }
-        .no-border td { border: none; padding: 4px 0; }
-        
-        /* Evidence Grid */
-        .photo-grid { display: table; width: 100%; }
-        .photo-cell { display: table-cell; width: 33%; padding: 10px; text-align: center; vertical-align: top; }
-        .photo-placeholder { border: 1px dashed #999; min-height: 150px; display: flex; align-items: center; justify-content: center; color: #999; }
-        .photo-caption { font-size: 9pt; margin-top: 5px; text-align: center; }
-        .photo-paraf { font-size: 9pt; margin-top: 8px; text-align: center; font-weight: bold; }
-        .photo-frame { border: 1px solid #ccc; padding: 4px; }
-        .photo-frame img { width: 100%; max-height: 180px; object-fit: contain; }
-        .photo-info-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 9.5pt; }
-        .photo-info-table td { padding: 3px 4px; vertical-align: top; }
-        .photo-info-table td:first-child { width: 120px; font-weight: bold; }
-        
-        /* Header */
-        .doc-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-        .doc-header h3 { margin: 0; font-size: 14pt; }
-        
-        /* Section Title */
-        .section-title { font-size: 13pt; font-weight: bold; margin: 20px 0 10px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        
-        /* OPM Table */
-        .opm-table th { background-color: #e8f4f8; }
-        
-        /* Footer */
-        .page-footer { position: fixed; bottom: 20px; left: 40px; right: 40px; font-size: 9pt; text-align: center; border-top: 1px solid #ccc; padding-top: 5px; }
-    </style>
+<meta charset="utf-8">
+<title>LACT</title>
+<style>
+body { font-family:'Times New Roman',serif; font-size:11pt; line-height:1.5; color:#000; }
+.page { page-break-after:always; padding:40px 50px; }
+.page:last-child { page-break-after:auto; }
+table { width:100%; border-collapse:collapse; margin:10px 0; font-size:10pt; }
+th,td { border:1px solid #000; padding:5px 7px; vertical-align:top; text-align:left; }
+th { background:#f0f0f0; font-weight:bold; text-align:center; }
+.no-border td { border:none; padding:3px 0; }
+.section-title { font-size:14pt; font-weight:bold; text-align:center; margin-bottom:12px; padding-bottom:5px; border-bottom:1px solid #000; }
+.info-table { width:100%; border-collapse:collapse; margin-bottom:14px; font-size:9.5pt; }
+.info-table td { border:none; padding:2px 4px; vertical-align:top; }
+.info-table td:first-child { width:130px; font-weight:bold; }
+.photo-grid { display:table; width:100%; }
+.photo-cell { display:table-cell; width:33%; padding:8px; text-align:center; vertical-align:top; }
+.photo-frame { border:1px solid #ccc; padding:3px; }
+.photo-frame img { width:100%; max-height:180px; object-fit:contain; }
+.photo-placeholder { border:1px dashed #999; height:150px; display:flex; align-items:center; justify-content:center; color:#999; font-size:9pt; }
+.photo-caption { font-size:8.5pt; margin-top:4px; text-align:center; }
+.photo-paraf { font-size:9pt; font-weight:bold; text-align:center; margin-top:6px; }
+.text-center { text-align:center; }
+</style>
 </head>
 <body>
 
 @php
-    $projectMeta = [
-        ['Proyek', $project->name ?? '-'],
-        ['Kontrak', $project->contract_number ?? '-'],
-        ['Surat Pesanan', $project->purchase_order_number ?? '-'],
-        ['Branch', strtoupper($project->branch->name ?? '-')],
-        ['Lokasi', ($lokasi->code ?? '-') . ' [' . ($lokasi->name ?? '-') . ']'],
-        ['Pelaksana', $project->implementer ?? '-'],
-    ];
+$projectMeta = [
+    ['PROYEK',        $project->name ?? '-'],
+    ['KONTRAK',       $project->contract_number ?? '-'],
+    ['SURAT PESANAN', $project->purchase_order_number ?? '-'],
+    ['BRANCH',        strtoupper($project->branch->name ?? '-')],
+    ['LOKASI',        ($lokasi->name ?? '-') . ' [' . ($lokasi->code ?? '-') . ']'],
+    ['PELAKSANA',     $project->implementer ?? '-'],
+];
 
-    function renderPhotoMetaTable($meta) {
-        echo '<table class="photo-info-table">';
-        foreach ($meta as $row) {
-            echo '<tr><td>' . $row[0] . '</td><td>: ' . $row[1] . '</td></tr>';
-        }
-        echo '</table>';
+function renderInfoTable($meta) {
+    echo '<table class="info-table">';
+    foreach ($meta as $row) {
+        echo '<tr><td>' . $row[0] . '</td><td>: ' . $row[1] . '</td></tr>';
     }
+    echo '</table>';
+}
 
-    function renderPhotoGrid($photos, $limit = 6) {
-        if (!$photos || $photos->count() === 0) {
-            echo '<p class="text-muted">Belum ada foto</p>';
-            return;
-        }
-
-        echo '<div class="photo-grid">';
-        foreach ($photos->take($limit) as $photo) {
-            $path = storage_path('app/public/' . $photo->file_path);
-            $path = str_replace('\\', '/', $path);
-            $src = file_exists($path) ? 'file:///' . $path : '';
-            echo '<div class="photo-cell">';
-            if ($src) {
-                echo '<div class="photo-frame"><img src="' . $src . '" alt="' . e($photo->label ?: $photo->original_name ?? 'Foto') . '"></div>';
-            } else {
-                echo '<div class="photo-placeholder">[Foto: ' . e($photo->original_name ?? ($photo->label ?? 'Foto')) . ']</div>';
-            }
-            echo '<div class="photo-caption">' . e($photo->label ?: ($photo->original_name ?? 'Foto')) . '</div>';
-            echo '<div class="photo-paraf">PARAF</div>';
-            echo '</div>';
-        }
+function renderPhotoGrid($photos, $limit = 6) {
+    $items = is_array($photos) ? $photos : $photos->all();
+    if (empty($items)) { echo '<p style="color:#999;font-size:9pt;">Belum ada foto.</p>'; return; }
+    echo '<div class="photo-grid">';
+    foreach (array_slice($items, 0, $limit) as $photo) {
+        $path = str_replace('\\', '/', storage_path('app/public/' . $photo->file_path));
+        $src  = file_exists($path) ? 'file:///' . $path : '';
+        echo '<div class="photo-cell">';
+        if ($src) echo '<div class="photo-frame"><img src="' . $src . '"></div>';
+        else       echo '<div class="photo-placeholder">[Foto]</div>';
+        if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
+        echo '<div class="photo-paraf">PARAF</div>';
         echo '</div>';
     }
+    echo '</div>';
+}
+
+function renderLargePhotoGrid($photos) {
+    $items = is_array($photos) ? $photos : $photos->all();
+    if (empty($items)) { echo '<p style="color:#999;font-size:9pt;">Belum ada foto.</p>'; return; }
+    foreach ($items as $photo) {
+        $path = str_replace('\\', '/', storage_path('app/public/' . $photo->file_path));
+        $src  = file_exists($path) ? 'file:///' . $path : '';
+        echo '<div style="text-align:center;margin-bottom:18px;">';
+        if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;max-height:280px;object-fit:contain;"></div>';
+        else       echo '<div class="photo-placeholder" style="height:200px;">[Foto]</div>';
+        if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
+        echo '<div class="photo-paraf">PARAF</div>';
+        echo '</div>';
+    }
+}
+
+function renderParaf($waspang, $branch, $tanggal, $implementer, $ctImgSrc = null) {
+    $name = $waspang ? e($waspang->nama ?? $waspang->name ?? '-') : '-';
+    $nik  = $waspang ? e($waspang->nik ?? '-') : '-';
+    echo '<table style="width:100%;border-collapse:collapse;margin-top:40px;">';
+    echo '<tr>';
+    echo '<td style="border:none;width:55%;">&nbsp;</td>';
+    echo '<td style="border:none;width:45%;text-align:center;vertical-align:top;">';
+    echo '<p style="font-weight:bold;margin:0;">' . e(strtoupper($branch)) . ', ' . e($tanggal) . '</p>';
+    echo '<p style="margin:3px 0;">WASPANG</p>';
+    echo '<p style="margin:3px 0;">' . e($implementer ?? 'PT TELKOM AKSES') . '</p>';
+    if ($ctImgSrc) echo '<img src="' . $ctImgSrc . '" style="width:100px;height:50px;object-fit:contain;margin:6px auto;display:block;">';
+    else           echo '<div style="height:55px;"></div>';
+    echo '<p style="font-weight:bold;margin:0;text-decoration:underline;">' . $name . '</p>';
+    echo '<p style="margin:0;">NIK : ' . $nik . '</p>';
+    echo '</td>';
+    echo '</tr></table>';
+}
+
+// CT image
+$ctImgSrc = null;
+if (!empty($commissioningImages) && $commissioningImages->count() > 0) {
+    $ci = $commissioningImages->first();
+    $cp = str_replace('\\', '/', storage_path('app/public/' . $ci->file_path));
+    if (file_exists($cp)) $ctImgSrc = 'file:///' . $cp;
+}
+
+// Foto sections (matching Next.js FOTO_SECTIONS)
+$fotoSections = [
+    ['label'=>'LAMPIRAN EVIDENT PEKERJAAN',
+     'cats'=>['evident_penarikan_kabel','evident_instalasi_aksesoris','evident_closure','evident_odp'],'large'=>false],
+    ['label'=>'LAMPIRAN MARKING KABEL',
+     'cats'=>['marking_kabel'],'large'=>false],
+    ['label'=>'LAMPIRAN EVIDENCE ODP',
+     'cats'=>['odp_solid','pemasangan_odp'],'large'=>false],
+    ['label'=>'LAMPIRAN EVIDENCE AKSESORIS',
+     'cats'=>['aksesoris_hl','aksesoris_sc'],'large'=>false],
+    ['label'=>'LAMPIRAN EVIDENCE CLOSURE & SPLITER 1:4',
+     'cats'=>['closure_splitter'],'large'=>false],
+    ['label'=>'LAMPIRAN EVIDENT HASIL UKUR OPM',
+     'cats'=>['opm_hasil_ukur'],'large'=>false],
+    ['label'=>'LAMPIRAN DATA PENGUKURAN OPM PROJECT OUTSIDE PLANT FIBER OPTIC',
+     'cats'=>['data_pengukuran_opm'],'large'=>true],
+    ['label'=>'LAMPIRAN MANCORE',
+     'cats'=>['mancore'],'large'=>true],
+    ['label'=>'LAMPIRAN EVIDENT AS BUILD DRAWING (ABD)',
+     'cats'=>['as_build_drawing'],'large'=>true],
+];
+
+// TOC
+$tocItems = [];
+$no = 1;
+if ($commissioning) $tocItems[] = $no++ . '.   Laporan Commisioning Test';
+if ($boqItems->count() > 0) $tocItems[] = $no++ . '.   Lampiran Bill Of Quantity';
+if ($opmRecords->count() > 0 || $otdrFiles->count() > 0)
+    $tocItems[] = $no++ . '.   Hasil Ukur OPM & OTDR (End To End Sesuai SOW)';
+if ($fotos->where('kategori','mancore')->count() > 0)
+    $tocItems[] = $no++ . '.   Lampiran Mancore';
+$tocItems[] = $no++ . '.   Berita Acara Lapangan & Dokumen Pendukung Lainnya';
 @endphp
 
-<!-- PAGE 1: COVER -->
+{{-- ===== COVER ===== --}}
 <div class="page">
-    <div style="text-align: center; padding-top: 60px;">
-        <h1 style="font-size: 20pt; font-weight: bold; margin-bottom: 40px;">LAPORAN COMMISSIONING TEST (LACT)</h1>
-
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 11pt; text-align: left;">
-            <tr><td style="width: 160px; font-weight: bold; padding: 5px 0;">PROYEK</td><td style="padding: 5px 0;">: {{ $project->name ?? '-' }}</td></tr>
-            <tr><td style="font-weight: bold; padding: 5px 0;">KONTRAK</td><td style="padding: 5px 0;">: {{ $project->contract_number ?? '-' }}</td></tr>
-            <tr><td style="font-weight: bold; padding: 5px 0;">SURAT PESANAN</td><td style="padding: 5px 0;">: {{ $project->purchase_order_number ?? '-' }}</td></tr>
-            <tr><td style="font-weight: bold; padding: 5px 0;">BRANCH</td><td style="padding: 5px 0;">: {{ strtoupper($project->branch->name ?? '-') }}</td></tr>
-            <tr><td style="font-weight: bold; padding: 5px 0;">LOKASI</td><td style="padding: 5px 0;">: {{ $lokasi->name ?? '-' }} [{{ $lokasi->code ?? '-' }}]</td></tr>
-            <tr><td style="font-weight: bold; padding: 5px 0;">PELAKSANA</td><td style="padding: 5px 0;">: {{ $project->implementer ?? '-' }}</td></tr>
+    <div style="text-align:center;padding-top:60px;">
+        <h1 style="font-size:20pt;font-weight:bold;margin-bottom:30px;">LAPORAN&nbsp;&nbsp;COMMISSIONING TEST (LACT)</h1>
+        <table style="border:none;margin-bottom:30px;font-size:11pt;">
+            <tr><td style="border:none;width:160px;font-weight:bold;padding:4px 0;">PROYEK</td><td style="border:none;padding:4px 0;">: {{ $project->name ?? '-' }}</td></tr>
+            <tr><td style="border:none;font-weight:bold;padding:4px 0;">KONTRAK</td><td style="border:none;padding:4px 0;">: {{ $project->contract_number ?? '-' }}</td></tr>
+            <tr><td style="border:none;font-weight:bold;padding:4px 0;">SURAT PESANAN</td><td style="border:none;padding:4px 0;">: {{ $project->purchase_order_number ?? '-' }}</td></tr>
+            <tr><td style="border:none;font-weight:bold;padding:4px 0;">BRANCH</td><td style="border:none;padding:4px 0;">: {{ strtoupper($project->branch->name ?? '-') }}</td></tr>
+            <tr><td style="border:none;font-weight:bold;padding:4px 0;">LOKASI</td><td style="border:none;padding:4px 0;">: {{ $lokasi->name ?? '-' }} [{{ $lokasi->code ?? '-' }}]</td></tr>
+            <tr><td style="border:none;font-weight:bold;padding:4px 0;">PELAKSANA</td><td style="border:none;padding:4px 0;">: {{ $project->implementer ?? '-' }}</td></tr>
         </table>
-
-        @php
-            $logoPath = public_path('images/logo.png');
-        @endphp
+        @php $logoPath = public_path('images/logo.png'); @endphp
         @if(file_exists($logoPath))
-        <div style="margin: 40px auto;">
-            <img src="file:///{{ str_replace('\\', '/', $logoPath) }}" style="max-width: 220px; max-height: 130px;">
+        <div style="margin:30px auto;">
+            <img src="file:///{{ str_replace('\\','/',$logoPath) }}" style="max-width:280px;max-height:140px;">
         </div>
         @else
-        <div style="height: 100px;"></div>
+        <div style="height:80px;"></div>
         @endif
-
-        <div style="margin-top: 40px; font-size: 12pt; line-height: 2;">
-            <p style="font-weight: bold;">ANTARA</p>
-            <p style="font-weight: bold;">{{ $project->pihak_pertama ?? 'PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.' }}</p>
-            <p style="font-weight: bold;">DENGAN</p>
-            <p style="font-weight: bold;">{{ strtoupper($project->implementer ?? 'PT. TELKOM AKSES') }}</p>
+        <div style="margin-top:50px;font-size:12pt;line-height:2.2;">
+            <p style="font-weight:bold;margin:0;">ANTARA</p>
+            <p style="font-weight:bold;margin:0;">{{ $project->pihak_pertama ?? 'PT. TELKOM INFRASTRUKTUR INDONESIA, Tbk.' }}</p>
+            <p style="font-weight:bold;margin:0;">DENGAN</p>
+            <p style="font-weight:bold;margin:0;">{{ strtoupper($project->implementer ?? 'PT. TELKOM AKSES') }}</p>
         </div>
     </div>
 </div>
 
-<!-- PAGE 2: DAFTAR ISI -->
+{{-- ===== DAFTAR ISI ===== --}}
 <div class="page">
-    <div style="text-align: center; padding-top: 80px;">
-        <h2 style="font-size: 16pt; font-weight: bold; margin-bottom: 6px;">DAFTAR ISI</h2>
-        <h3 style="font-size: 13pt; font-weight: bold; margin-bottom: 4px;">DOKUMEN LAPORAN COMMISIONING TEST</h3>
-        <h3 style="font-size: 13pt; font-weight: bold; margin-bottom: 0;">(LACT)</h3>
+    <div style="text-align:center;padding-top:60px;margin-bottom:40px;">
+        <h2 style="font-size:16pt;font-weight:bold;margin-bottom:6px;">DAFTAR ISI</h2>
+        <h3 style="font-size:13pt;font-weight:bold;margin-bottom:4px;">DOKUMEN LAPORAN COMMISIONING TEST</h3>
+        <h3 style="font-size:13pt;font-weight:bold;margin:0;">(LACT)</h3>
     </div>
-    @php
-        $tocItems = [];
-        $no = 1;
-        if (!empty($commissioning))
-            $tocItems[] = $no++ . '.   Laporan Commisioning Test';
-        if (!empty($boqItems) && $boqItems->count() > 0)
-            $tocItems[] = $no++ . '.   Lampiran Bill Of Quantity';
-        if ((!empty($opmRecords) && $opmRecords->count() > 0) || (!empty($otdrFiles) && $otdrFiles->count() > 0))
-            $tocItems[] = $no++ . '.   Hasil Ukur OPM & OTDR (End To End Sesuai SOW)';
-        if (!empty($mancoreItems) && $mancoreItems->count() > 0)
-            $tocItems[] = $no++ . '.   Lampiran Mancore';
-        $tocItems[] = $no++ . '.   Berita Acara Lapangan & Dokumen Pendukung Lainnya';
-    @endphp
-    <div style="margin-top: 60px; font-size: 12pt; line-height: 2.2;">
+    <div style="font-size:12pt;line-height:2.4;margin-top:20px;">
         @foreach($tocItems as $item)
-        <p>{{ $item }}</p>
+        <p style="margin:0;">{{ $item }}</p>
         @endforeach
     </div>
 </div>
 
-<!-- PAGE 3: COMMISSIONING TEST -->
+{{-- ===== COMMISSIONING TEST ===== --}}
+@if($commissioning)
 <div class="page">
-    <div class="doc-header">
-        <h3>BAB 1: COMMISSIONING TEST</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class="section-title">1.1 Identitas Pemeriksa (Waspang)</div>
-    <table>
-        <tr><td width="150">Nama</td><td>: {{ $waspang->name ?? 'Syaifin Nizar Zulmi' }}</td></tr>
-        <tr><td>NIK</td><td>: {{ $waspang->nik ?? '885776' }}</td></tr>
-        <tr><td>Jabatan</td><td>: Waspang</td></tr>
-        <tr><td>Perusahaan</td><td>: PT TELKOM AKSES</td></tr>
-    </table>
-    
-    <div class="section-title">1.2 Hasil Pemeriksaan</div>
-    <table>
-        <tr>
-            <th width="200">Parameter</th>
-            <th>Nilai</th>
-        </tr>
-        <tr>
-            <td>Status Pekerjaan</td>
-            <td>
-                @if($commissioning->status_pekerjaan === 'telah')
-                    <strong>TELAH SELESAI</strong>
-                    <strike>Belum Selesai</strike>
-                @else
-                    <strike>Telah Selesai</strike>
-                    <strong>BELUM SELESAI</strong>
-                @endif
-            </td>
-        </tr>
-        <tr>
-            <td>Hasil Pekerjaan</td>
-            <td>
-                @if($commissioning->status_hasil === 'dapat')
-                    <strong>DITERIMA & LAYAK UT</strong>
-                    <strike>Tidak Diterima</strike>
-                @else
-                    <strike>Diterima & Layak UT</strike>
-                    <strong>TIDAK DITERIMA</strong>
-                @endif
-            </td>
-        </tr>
-        <tr>
-            <td>Tanggal Pemeriksaan</td>
-            <td>: {{ $commissioning->tanggal?->format('d F Y') ?? '5 Mei 2026' }}</td>
-        </tr>
-        <tr>
-            <td>Kota Tanda Tangan</td>
-            <td>: {{ $kota_ttd }}</td>
-        </tr>
-    </table>
-    
-    <div class="section-title">1.3 Pernyataan Waspang</div>
-    <p style="text-align: justify; margin: 20px 0;">
-        Saya yang bertanda tangan di bawah ini, menyatakan bahwa pekerjaan pada proyek 
-        <strong>{{ $project->name }}</strong> telah diperiksa dan diverifikasi. 
-        Berdasarkan hasil pemeriksaan, pekerjaan tersebut 
-        @if($commissioning->status_pekerjaan === 'telah')
-            <strong>TELAH SELESAI</strong> 
-        @else
-            <strong>BELUM SELESAI</strong>
-        @endif
-        dan 
-        @if($commissioning->status_hasil === 'dapat')
-            <strong>DITERIMA & LAYAK UNTUK (UT)</strong>.
-        @else
-            <strong>TIDAK DITERIMA</strong>.
-        @endif
-    </p>
-    
-    <div class="signature-block">
-        <table>
-            <tr>
-                <td>
-                    <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>{{ $waspang->name ?? 'Syaifin Nizar Zulmi' }}</strong></p>
-                    <p class="text-center mb-0">NIK: {{ $waspang->nik ?? '885776' }}</p>
-                    <p class="text-center mb-0">Waspang</p>
-                    <p class="text-center mb-0">PT TELKOM AKSES</p>
-                </td>
-                <td>
-                    <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>Staff Waspang</strong></p>
-                    <p class="text-center mb-0">PT TELKOM AKSES</p>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+    <div class="section-title">LAPORAN COMMISIONING TEST</div>
+    @php renderInfoTable($projectMeta); @endphp
 
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 1.4: LAMPIRAN FOTO COMMISSIONING TEST</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    <div class="section-title">1.4.1 Dokumentasi Commissioning Test</div>
-    @php renderPhotoGrid($commissioningImages, 6); @endphp
-</div>
+    <p style="margin-bottom:8px;">Pada hari ini {{ $tanggal_ttd }} yang bertanda tangan di bawah ini :</p>
 
-<!-- PAGE 4-6: BOQ -->
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 2: BILL OF QUANTITY (BOQ)</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-
-    <table>
-        <thead>
-            <tr>
-                <th class="text-center" width="35">No</th>
-                <th width="85">Kode Item</th>
-                <th>Nama Item</th>
-                <th class="text-center" width="55">Satuan</th>
-                <th class="text-center" width="60">DRM</th>
-                <th class="text-center" width="60">Aktual</th>
-                <th class="text-center" width="60">Tambah</th>
-                <th class="text-center" width="60">Kurang</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($boqItems as $index => $item)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $item->kode_item ?? '' }}</td>
-                <td>{{ $item->nama_item }}</td>
-                <td class="text-center">{{ $item->satuan ?? '' }}</td>
-                <td class="text-center">{{ $item->volume_drm ?? '-' }}</td>
-                <td class="text-center">{{ $item->volume_aktual ?? '-' }}</td>
-                <td class="text-center">{{ $item->volume_tambah ?? '-' }}</td>
-                <td class="text-center">{{ $item->volume_kurang ?? '-' }}</td>
-            </tr>
-            @empty
-            <tr><td colspan="8" class="text-center text-muted">Belum ada data BOQ</td></tr>
-            @endforelse
-        </tbody>
+    <table class="no-border" style="margin:8px 0 12px;">
+        <tr><td style="width:80px;">Nama</td><td>: {{ $waspang->nama ?? ($waspang->name ?? '-') }}</td></tr>
+        <tr><td>NIK</td><td>: {{ $waspang->nik ?? '-' }}</td></tr>
+        <tr><td>Jabatan</td><td>: WASPANG PT. TELKOM AKSES</td></tr>
     </table>
-</div>
 
-@if($boqItems->count() > 15)
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 2: BILL OF QUANTITY (BOQ) - Lanjutan</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    <table>
-        <thead>
-            <tr>
-                <th class="text-center" width="35">No</th>
-                <th width="85">Kode Item</th>
-                <th>Nama Item</th>
-                <th class="text-center" width="55">Satuan</th>
-                <th class="text-center" width="60">DRM</th>
-                <th class="text-center" width="60">Aktual</th>
-                <th class="text-center" width="60">Tambah</th>
-                <th class="text-center" width="60">Kurang</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($boqItems->slice(15) as $index => $item)
-            <tr>
-                <td class="text-center">{{ $index + 16 }}</td>
-                <td>{{ $item->kode_item ?? '' }}</td>
-                <td>{{ $item->nama_item }}</td>
-                <td class="text-center">{{ $item->satuan ?? '' }}</td>
-                <td class="text-center">{{ $item->volume_drm ?? '-' }}</td>
-                <td class="text-center">{{ $item->volume_aktual ?? '-' }}</td>
-                <td class="text-center">{{ $item->volume_tambah ?? '-' }}</td>
-                <td class="text-center">{{ $item->volume_kurang ?? '-' }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <p style="margin-bottom:8px;">Sehubungan dengan {{ $lokasi->name }} [{{ $lokasi->code }}] menerangkan bahwa telah melaksanakan pemeriksaan kesisteman (Commisioning Test) dan fisik pada lokasi {{ $lokasi->name }} [{{ $lokasi->code }}] sebagai berikut :</p>
+
+    <p style="margin-bottom:6px;">1.&nbsp;&nbsp;&nbsp;Pelaksanaan pekerjaan <strong>{{ $commissioning->status_pekerjaan === 'telah' ? 'telah' : 'belum' }}</strong> diselesaikan dengan spesifikasi teknis TELKOM</p>
+    <p style="margin-bottom:12px;">2.&nbsp;&nbsp;&nbsp;Hasil pekerjaan <strong>{{ $commissioning->status_hasil === 'dapat' ? 'dapat' : 'tidak dapat' }}</strong> diterima dan <strong>{{ $commissioning->status_kelayakan === 'layak' ? 'layak' : 'tidak layak' }}</strong> untuk diajukan Uji Terima (UT)</p>
+
+    <p style="margin-bottom:0;">Demikian Laporan Commisioning Test dan Hasil Ukur ini dibuat dengan sebenarnya dan dapat dipertanggung jawabkan.</p>
+
+    @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
 </div>
 @endif
 
-<!-- PAGE 7-10: EVIDENCE PEKERJAAN -->
+{{-- ===== BOQ ===== --}}
+@if($boqItems->count() > 0)
 <div class="page">
-    <div class="doc-header">
-        <h3>BAB 3: LAMPIRAN EVIDENCE PEKERJAAN</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class="section-title">3.1 Penarikan Kabel</div>
-    @php $photos = $evidencePhotos->get('evident_penarikan_kabel', collect()); @endphp
-    {!! renderPhotoGrid($photos) !!}
-    
-    <div class="section-title">3.2 Instalasi Aksesoris</div>
-    @php $photos = $evidencePhotos->get('evident_instalasi_aksesoris', collect()); @endphp
-    {!! renderPhotoGrid($photos) !!}
-</div>
-
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 4: LAMPIRAN EVIDENCE CLOSURE & ODP</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class="section-title">4.1 Instalasi & Penyambungan Closure</div>
-    @php $photos = $evidencePhotos->get('evident_closure', collect()); @endphp
-    {!! renderPhotoGrid($photos) !!}
-    
-    <div class="section-title">4.2 Penyambungan & Instalasi ODP</div>
-    @php $photos = $evidencePhotos->get('evident_odp', collect()); @endphp
-    {!! renderPhotoGrid($photos) !!}
-</div>
-
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 5: LAMPIRAN EVIDENCE AS BUILD DRAWING (ABD)</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    @php $photos = $evidencePhotos->get('as_build_drawing', collect()); @endphp
-    {!! renderPhotoGrid($photos) !!}
-</div>
-
-<!-- PAGE 11: MARKING KABEL -->
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 6: MARKING KABEL</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
+    <div class="section-title">LAPORAN BILL OF QUANTITY</div>
+    @php renderInfoTable($projectMeta); @endphp
     <table>
         <thead>
             <tr>
-                <th class="text-center" width="50">No</th>
-                <th>Jenis Kabel</th>
-                <th class="text-center" width="100">Panjang (m)</th>
-                <th>Keterangan</th>
+                <th width="35">No</th>
+                <th width="85">Kode Item</th>
+                <th>Nama Item</th>
+                <th width="55">Satuan</th>
+                <th width="58">DRM</th>
+                <th width="58">Aktual</th>
+                <th width="58">Tambah</th>
+                <th width="58">Kurang</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($markingKabels as $index => $mk)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $mk->jenis_kabel }}</td>
-                <td class="text-center">{{ $mk->panjang_meter }}</td>
-                <td>ODP {{ $mk->lokasi->code ?? '' }}</td>
-            </tr>
-            @empty
-            <tr><td colspan="4" class="text-center text-muted">Belum ada data marking kabel</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
-
-<!-- PAGE 12-14: EVIDENCE ODP & AKSESORIS -->
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 5: EVIDENCE ODP</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class="section-title">5.1 Evidence ODP</div>
-    @php $photos = $evidencePhotos->get('evident_odp', collect())->merge($evidencePhotos->get('odp_solid', collect()))->merge($evidencePhotos->get('pemasangan_odp', collect())); @endphp
-    {!! renderPhotoGrid($photos) !!}
-</div>
-
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 6: EVIDENCE AKSESORIS & CLOSURE</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class="section-title">6.1 Evidence Aksesoris (PU-AS-HL & PU-AS-SC)</div>
-    @php $photos = $evidencePhotos->get('aksesoris_hl', collect())->merge($evidencePhotos->get('aksesoris_sc', collect())); @endphp
-    {!! renderPhotoGrid($photos) !!}
-    
-    <div class="section-title">6.2 Evidence Closure dan Splitter 1:4</div>
-    @php $photos = $evidencePhotos->get('closure_splitter', collect()); @endphp
-    {!! renderPhotoGrid($photos) !!}
-</div>
-
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 7: LAMPIRAN EVIDENCE OPM & OTDR</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    @php $photos = $evidencePhotos->get('opm_hasil_ukur', $evidencePhotos->get('opm_otdr', collect())); @endphp
-    {!! renderPhotoGrid($photos, 6) !!}
-</div>
-
-<!-- PAGE 17-18: OPM (dynamic) -->
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 8: HASIL UKUR OPM</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-
-    @if($opmRecords->count() > 0)
-    <table class="opm-table">
-        <thead>
-            <tr>
-                <th class="text-center" width="30">No</th>
-                <th>Nama ODP</th>
-                <th class="text-center" width="52">P1</th>
-                <th class="text-center" width="52">P2</th>
-                <th class="text-center" width="52">P3</th>
-                <th class="text-center" width="52">P4</th>
-                <th class="text-center" width="52">P5</th>
-                <th class="text-center" width="52">P6</th>
-                <th class="text-center" width="52">P7</th>
-                <th class="text-center" width="52">P8</th>
-                <th>Catatan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($opmRecords as $i => $record)
+            @foreach($boqItems as $i => $item)
             <tr>
                 <td class="text-center">{{ $i + 1 }}</td>
-                <td>{{ $record->odp_name }}</td>
-                <td class="text-center">{{ $record->port_1 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_2 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_3 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_4 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_5 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_6 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_7 ?? '-' }}</td>
-                <td class="text-center">{{ $record->port_8 ?? '-' }}</td>
-                <td>{{ $record->notes ?? '-' }}</td>
+                <td>{{ $item->kode_item ?? '' }}</td>
+                <td>{{ $item->nama_item }}</td>
+                <td class="text-center">{{ $item->satuan ?? '' }}</td>
+                <td class="text-center">{{ $item->volume_drm ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_aktual ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_tambah ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_kurang ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
-    @else
-    <p class="text-muted">Belum ada data OPM.</p>
-    @endif
-
-    <div class="signature-block">
-        <table>
-            <tr>
-                <td>
-                    <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>Staff Pengukur</strong></p>
-                    <p class="text-center mb-0">NIK: ___________</p>
-                    <p class="text-center mb-0">PT TELKOM AKSES</p>
-                </td>
-                <td>
-                    <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>{{ $waspang->nama ?? 'Waspang' }}</strong></p>
-                    <p class="text-center mb-0">NIK: {{ $waspang->nik ?? '___________' }}</p>
-                    <p class="text-center mb-0">PT TELKOM AKSES</p>
-                </td>
-            </tr>
-        </table>
-        <p class="text-center mt-3"><strong>{{ $kota_ttd }}, {{ $tanggal_ttd }}</strong></p>
-    </div>
+    @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
 </div>
 
-<!-- PAGE 19+: OTDR per ODP (dynamic) -->
-@if($otdrFiles->count() > 0)
-@php $otdrGrouped = $otdrFiles->groupBy('odp_name'); @endphp
-@foreach($otdrGrouped as $odpName => $files)
+{{-- BOQ Photos --}}
+@php
+$boqPhotos  = $fotos->where('kategori','laporan_boq')->values();
+$boqChunks  = $boqPhotos->chunk(2);
+@endphp
+@foreach($boqChunks as $ci => $chunk)
 <div class="page">
-    <div class="doc-header">
-        <h3>LAMPIRAN HASIL UKUR OTDR {{ strtoupper($odpName ?? 'OTDR') }}</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
+    <div class="section-title">{{ $ci === 0 ? 'FOTO LAPORAN BOQ' : 'FOTO LAPORAN BOQ (lanjutan)' }}</div>
+    @php renderInfoTable($projectMeta); @endphp
+    @php renderLargePhotoGrid($chunk->all()); @endphp
+    @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
+</div>
+@endforeach
+@endif
 
-    @foreach($files as $otdr)
+{{-- ===== FOTO SECTIONS ===== --}}
+@foreach($fotoSections as $fs)
+@php
+$secFotos  = $fotos->filter(fn($f) => in_array($f->kategori, $fs['cats']))->values();
+$chunkSize = $fs['large'] ? 2 : 6;
+$secChunks = $secFotos->chunk($chunkSize);
+@endphp
+@if($secFotos->count() > 0)
+@foreach($secChunks as $ci => $chunk)
+<div class="page">
+    <div class="section-title">{{ strtoupper($fs['label']) }}</div>
+    @php renderInfoTable($projectMeta); @endphp
+    @if($fs['large'])
+        @php renderLargePhotoGrid($chunk->all()); @endphp
+    @else
+        @php renderPhotoGrid($chunk->all(), $chunkSize); @endphp
+    @endif
+    @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
+</div>
+@endforeach
+@endif
+@endforeach
+
+{{-- ===== OPM (per-ODP mini-tables) ===== --}}
+@if($opmRecords->count() > 0)
+<div class="page">
+    <div class="section-title">LAMPIRAN EVIDENT HASIL UKUR OPM</div>
+    @php renderInfoTable($projectMeta); @endphp
+    @foreach($opmRecords as $opm)
+    <table style="margin-bottom:14px;">
+        <tr>
+            <th width="90">Nama ODP</th>
+            <th>P1</th><th>P2</th><th>P3</th><th>P4</th>
+            <th>P5</th><th>P6</th><th>P7</th><th>P8</th>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">{{ $opm->odp_name }}</td>
+            <td class="text-center">{{ $opm->port_1 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_2 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_3 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_4 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_5 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_6 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_7 ?? '-' }}</td>
+            <td class="text-center">{{ $opm->port_8 ?? '-' }}</td>
+        </tr>
+    </table>
+    @endforeach
+    @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
+</div>
+@endif
+
+{{-- ===== OTDR (2 per page) ===== --}}
+@if($otdrFiles->count() > 0)
+@php $otdrChunks = $otdrFiles->chunk(2); @endphp
+@foreach($otdrChunks as $chunk)
+<div class="page">
+    <div class="section-title">LAMPIRAN HASIL UKUR OTDR</div>
+    @php renderInfoTable($projectMeta); @endphp
+    @foreach($chunk as $otdr)
     @php
-        $otdrPath = str_replace('\\', '/', storage_path('app/public/' . $otdr->file_path));
+        $op  = str_replace('\\', '/', storage_path('app/public/' . $otdr->file_path));
         $ext = strtolower(pathinfo($otdr->original_name ?? $otdr->file_path, PATHINFO_EXTENSION));
-        $isImg = in_array($ext, ['jpg', 'jpeg', 'png']);
-        $otdrSrc = file_exists($otdrPath) ? 'file:///' . $otdrPath : '';
+        $os  = (file_exists($op) && in_array($ext, ['jpg','jpeg','png'])) ? 'file:///' . $op : '';
     @endphp
-    <div style="margin-bottom:20px;text-align:center;">
-        @if($otdrSrc && $isImg)
-        <div class="photo-frame">
-            <img src="{{ $otdrSrc }}" alt="{{ $otdr->odp_name }}" style="width:100%;max-height:320px;object-fit:contain;">
-        </div>
+    <div style="text-align:center;margin-bottom:18px;">
+        @if($os)
+        <div class="photo-frame"><img src="{{ $os }}" style="width:100%;max-height:280px;object-fit:contain;"></div>
         @else
-        <div class="photo-placeholder" style="height:200px;">
-            [{{ $otdr->original_name ?? basename($otdr->file_path) }}]
-        </div>
+        <div class="photo-placeholder" style="height:200px;">[{{ $otdr->original_name ?? basename($otdr->file_path) }}]</div>
         @endif
-        <div class="photo-caption">{{ $otdr->original_name ?? basename($otdr->file_path) }}</div>
+        <div class="photo-caption">{{ $otdr->original_name ?? basename($otdr->file_path) }} &mdash; {{ $otdr->odp_name ?? '' }}</div>
         <div class="photo-paraf">PARAF</div>
     </div>
     @endforeach
+    @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
 </div>
 @endforeach
-@else
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 10: HASIL UKUR OTDR</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    <p class="text-muted">Belum ada file OTDR.</p>
-</div>
 @endif
-
-<!-- PAGE 21: MANCORE -->
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 11: DATA MANCORE</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class=\"section-title\">11.1 Data Penyambungan Core di Closure</div>
-    <table>
-        <thead>
-            <tr>
-                <th class="text-center" width="50">No</th>
-                <th>Core Dari</th>
-                <th>Warna</th>
-                <th>Core Ke</th>
-                <th>Keterangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($mancoreItems as $index => $mcore)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $mcore->core_from }}</td>
-                <td>{{ $mcore->warna }}</td>
-                <td>{{ $mcore->core_to }}</td>
-                <td>{{ $mcore->description ?? '-' }}</td>
-            </tr>
-            @empty
-            <tr><td colspan="5" class="text-center text-muted">Belum ada data mancore</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
-
-<!-- PAGE 22-23: APPROVAL -->
-<div class="page">
-    <div class="doc-header">
-        <h3>BAB 12: PERSETUJUAN WASPANG</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class=\"section-title\">12.1 Pernyataan Persetujuan</div>
-    <p style="text-align: justify; margin: 20px 0;">
-        Saya yang bertanda tangan di bawah ini, selaku <strong>Waspang</strong> PT TELKOM AKSES, 
-        menyatakan bahwa seluruh dokumen Laporan Akhir Cabang Telekomunikasi (LACT) untuk proyek 
-        <strong>{{ $project->name }}</strong> telah diperiksa dan diverifikasi kelengkapannya.
-    </p>
-    @if(isset($approval) && $approval)
-    <table>
-        <tr>
-            <th width="150">Status</th>
-            <td><strong>{{ strtoupper($approval->status) }}</strong></td>
-        </tr>
-        <tr>
-            <th>Disetujui Oleh</th>
-            <td>{{ $approval->reviewer->name ?? '-' }}</td>
-        </tr>
-        <tr>
-            <th>Tanggal</th>
-            <td>{{ $approval->decided_at?->format('d F Y H:i') ?? '-' }}</td>
-        </tr>
-        @if(isset($approval) && $approval && $approval->notes)
-        <tr>
-            <th>Catatan</th>
-            <td>{{ $approval->notes }}</td>
-        </tr>
-        @endif
-    </table>
-    @else
-    <p class="text-muted">Belum ada persetujuan</p>
-    @endif
-    
-    <div class="signature-block">
-        <table>
-            <tr>
-                <td>
-                    <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>{{ $waspang->name ?? 'Syaifin Nizar Zulmi' }}</strong></p>
-                    <p class="text-center mb-0">NIK: {{ $waspang->nik ?? '885776' }}</p>
-                    <p class="text-center mb-0">Waspang</p>
-                    <p class="text-center mb-0">PT TELKOM AKSES</p>
-                </td>
-                <td>
-                    <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>Koordinator Waspang</strong></p>
-                    <p class="text-center mb-0">PT TELKOM AKSES</p>
-                </td>
-            </tr>
-        </table>
-        <p class="text-center mt-3"><strong>{{ $kota_ttd }}, {{ $tanggal_ttd }}</strong></p>
-    </div>
-</div>
 
 </body>
 </html>
