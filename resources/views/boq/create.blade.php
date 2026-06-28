@@ -135,7 +135,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center text-muted">Belum ada data BOQ untuk filter yang dipilih.</td>
+                                        <td colspan="6" class="text-center">Belum ada data BOQ untuk filter yang dipilih.</td>
                                     </tr>
                                     @endforelse
                                 </tbody>

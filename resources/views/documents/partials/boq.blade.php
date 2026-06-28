@@ -24,7 +24,7 @@
                         <td class="text-center">{{ $item->unit }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="text-center text-muted">Belum ada data BOQ.</td></tr>
+                    <tr><td colspan="5" class="text-center">Belum ada data BOQ.</td></tr>
                     @endforelse
                 </tbody>
             </table>

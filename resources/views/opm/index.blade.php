@@ -58,7 +58,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="5" class="text-center text-muted">Belum ada data OPM</td></tr>
+                            <tr><td colspan="5" class="text-center">Belum ada data OPM</td></tr>
                             @endforelse
                         </tbody>
                     </table>

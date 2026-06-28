@@ -41,7 +41,7 @@
                     </div>
                     @endif
                     <div style="padding:0.5rem;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-size:0.75rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80%;">{{ $otdr->original_name }}</span>
+                        <span style="font-size:0.75rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80%;">{{ $otdr->original_name }}</span>
                         <form action="{{ route('otdr.destroy', [$lokasi, $otdr]) }}" method="POST" onsubmit="return confirm('Hapus?')" style="margin:0;">
                             @csrf @method('DELETE')
                             <button class="btn-danger-sm" style="padding:0.2rem 0.4rem;"><i class="bi bi-trash" style="font-size:0.7rem;"></i></button>

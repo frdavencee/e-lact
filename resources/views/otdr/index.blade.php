@@ -45,7 +45,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="4" class="text-center text-muted">Belum ada file OTDR</td></tr>
+                <tr><td colspan="4" class="text-center">Belum ada file OTDR</td></tr>
                 @endforelse
             </tbody>
         </table>

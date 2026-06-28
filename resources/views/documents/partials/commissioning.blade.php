@@ -496,7 +496,7 @@
                 <td>{{ $mcore->description ?? '-' }}</td>
             </tr>
             @empty
-            <tr><td colspan="5" class="text-center text-muted">Belum ada data mancore</td></tr>
+            <tr><td colspan="5" class="text-center">Belum ada data mancore</td></tr>
             @endforelse
         </tbody>
     </table>
