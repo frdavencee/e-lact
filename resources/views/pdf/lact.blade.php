@@ -269,49 +269,40 @@
         <h3>BAB 2: BILL OF QUANTITY (BOQ)</h3>
     </div>
     @php renderPhotoMetaTable($projectMeta); @endphp
-    
+
     <table>
         <thead>
             <tr>
-                <th class="text-center" width="50">No</th>
-                <th>Kode Item</th>
-                <th>Uraian Pekerjaan</th>
-                <th class="text-center" width="80">Volume</th>
-                <th class="text-center" width="70">Satuan</th>
-                <th class="text-end" width="120">Harga Satuan (Rp)</th>
-                <th class="text-end" width="140">Jumlah (Rp)</th>
+                <th class="text-center" width="35">No</th>
+                <th width="85">Kode Item</th>
+                <th>Nama Item</th>
+                <th class="text-center" width="55">Satuan</th>
+                <th class="text-center" width="60">DRM</th>
+                <th class="text-center" width="60">Aktual</th>
+                <th class="text-center" width="60">Tambah</th>
+                <th class="text-center" width="60">Kurang</th>
             </tr>
         </thead>
         <tbody>
-            @php $total = 0; @endphp
             @forelse($boqItems as $index => $item)
-            @php
-                $jumlah = $item->price * $item->volume;
-                $total += $jumlah;
-            @endphp
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $item->item_code ?? '' }}</td>
-                <td>{{ $item->name }}</td>
-                <td class="text-center">{{ $item->volume }}</td>
-                <td class="text-center">{{ $item->unit }}</td>
-                <td class="text-end">{{ number_format($item->price, 2) }}</td>
-                <td class="text-end">{{ number_format($jumlah, 2) }}</td>
+                <td>{{ $item->kode_item ?? '' }}</td>
+                <td>{{ $item->nama_item }}</td>
+                <td class="text-center">{{ $item->satuan ?? '' }}</td>
+                <td class="text-center">{{ $item->volume_drm ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_aktual ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_tambah ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_kurang ?? '-' }}</td>
             </tr>
             @empty
-            <tr><td colspan="7" class="text-center text-muted">Belum ada data BOQ</td></tr>
+            <tr><td colspan="8" class="text-center text-muted">Belum ada data BOQ</td></tr>
             @endforelse
         </tbody>
-        <tfoot>
-            <tr class="fw-bold">
-                <td colspan="6" class="text-end">TOTAL</td>
-                <td class="text-end">{{ number_format($total, 2) }}</td>
-            </tr>
-        </tfoot>
     </table>
 </div>
 
-@if($boqItems->count() > 10)
+@if($boqItems->count() > 15)
 <div class="page">
     <div class="doc-header">
         <h3>BAB 2: BILL OF QUANTITY (BOQ) - Lanjutan</h3>
@@ -320,29 +311,27 @@
     <table>
         <thead>
             <tr>
-                <th class="text-center" width="50">No</th>
-                <th>Kode Item</th>
-                <th>Uraian Pekerjaan</th>
-                <th class="text-center" width="80">Volume</th>
-                <th class="text-center" width="70">Satuan</th>
-                <th class="text-end" width="120">Harga Satuan (Rp)</th>
-                <th class="text-end" width="140">Jumlah (Rp)</th>
+                <th class="text-center" width="35">No</th>
+                <th width="85">Kode Item</th>
+                <th>Nama Item</th>
+                <th class="text-center" width="55">Satuan</th>
+                <th class="text-center" width="60">DRM</th>
+                <th class="text-center" width="60">Aktual</th>
+                <th class="text-center" width="60">Tambah</th>
+                <th class="text-center" width="60">Kurang</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($boqItems->slice(10) as $index => $item)
-            @php
-                $no = $index + 11;
-                $jumlah = $item->price * $item->volume;
-            @endphp
+            @foreach($boqItems->slice(15) as $index => $item)
             <tr>
-                <td class="text-center">{{ $no }}</td>
-                <td>{{ $item->item_code ?? '' }}</td>
-                <td>{{ $item->name }}</td>
-                <td class="text-center">{{ $item->volume }}</td>
-                <td class="text-center">{{ $item->unit }}</td>
-                <td class="text-end">{{ number_format($item->price, 2) }}</td>
-                <td class="text-end">{{ number_format($jumlah, 2) }}</td>
+                <td class="text-center">{{ $index + 16 }}</td>
+                <td>{{ $item->kode_item ?? '' }}</td>
+                <td>{{ $item->nama_item }}</td>
+                <td class="text-center">{{ $item->satuan ?? '' }}</td>
+                <td class="text-center">{{ $item->volume_drm ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_aktual ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_tambah ?? '-' }}</td>
+                <td class="text-center">{{ $item->volume_kurang ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -457,92 +446,52 @@
     {!! renderPhotoGrid($photos, 6) !!}
 </div>
 
-<!-- PAGE 17-18: OPM -->
+<!-- PAGE 17-18: OPM (dynamic) -->
 <div class="page">
     <div class="doc-header">
         <h3>BAB 8: HASIL UKUR OPM</h3>
     </div>
     @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class=\"section-title\">9.1 Data Pengukuran ODP-PAT-FW/114</div>
-    <table class="opm-table">
-        <thead>
-            <tr>
-                <th class="text-center" width="80">Port</th>
-                <th class="text-center">Fiber</th>
-                <th class="text-end">Nilai (dBm)</th>
-                <th>Keterangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $records114 = $opmRecords->where('odp_name', 'ODP-PAT-FW/114');
-            @endphp
-            @forelse($records114 as $record)
-            <tr>
-                <td class="text-center">{{ $record->port }}</td>
-                <td class="text-center">-</td>
-                <td class="text-end">{{ $record->value }}</td>
-                <td>-</td>
-            </tr>
-            @empty
-            <tr>
-                <td class="text-center">1</td><td class="text-center">-</td><td class="text-end">-15,30</td><td>-</td>
-                <td class="text-center">2</td><td class="text-center">-</td><td class="text-end">-15,35</td><td>-</td>
-                <td class="text-center">3</td><td class="text-center">-</td><td class="text-end">-15,40</td><td>-</td>
-                <td class="text-center">4</td><td class="text-center">-</td><td class="text-end">-15,25</td><td>-</td>
-                <td class="text-center">5</td><td class="text-center">-</td><td class="text-end">-15,50</td><td>-</td>
-                <td class="text-center">6</td><td class="text-center">-</td><td class="text-end">-15,45</td><td>-</td>
-                <td class="text-center">7</td><td class="text-center">-</td><td class="text-end">-15,30</td><td>-</td>
-                <td class="text-center">8</td><td class="text-center">-</td><td class="text-end">-15,35</td><td>-</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-    
-    <div class=\"section-title\">9.2 Data Pengukuran ODP-PAT-FW/115</div>
-    <table class="opm-table">
-        <thead>
-            <tr>
-                <th class="text-center" width="80">Port</th>
-                <th class="text-center">Fiber</th>
-                <th class="text-end">Nilai (dBm)</th>
-                <th>Keterangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $records115 = $opmRecords->where('odp_name', 'ODP-PAT-FW/115');
-            @endphp
-            @forelse($records115 as $record)
-            <tr>
-                <td class="text-center">{{ $record->port }}</td>
-                <td class="text-center">-</td>
-                <td class="text-end">{{ $record->value }}</td>
-                <td>-</td>
-            </tr>
-            @empty
-            <tr>
-                <td class="text-center">1</td><td class="text-center">-</td><td class="text-end">-15,10</td><td>-</td>
-                <td class="text-center">2</td><td class="text-center">-</td><td class="text-end">-15,20</td><td>-</td>
-                <td class="text-center">3</td><td class="text-center">-</td><td class="text-end">-15,40</td><td>-</td>
-                <td class="text-center">4</td><td class="text-center">-</td><td class="text-end">-16,00</td><td>-</td>
-                <td class="text-center">5</td><td class="text-center">-</td><td class="text-end">-15,60</td><td>-</td>
-                <td class="text-center">6</td><td class="text-center">-</td><td class="text-end">-16,20</td><td>-</td>
-                <td class="text-center">7</td><td class="text-center">-</td><td class="text-end">-16,50</td><td>-</td>
-                <td class="text-center">8</td><td class="text-center">-</td><td class="text-end">-15,80</td><td>-</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
 
-<div class="page">
-    <div class="doc-header">
-        <h3>TANDA TANGAN PENGUKUR OPM</h3>
-    </div>
-    @php renderPhotoMetaTable($projectMeta); @endphp
-    
+    @if($opmRecords->count() > 0)
+    <table class="opm-table">
+        <thead>
+            <tr>
+                <th class="text-center" width="30">No</th>
+                <th>Nama ODP</th>
+                <th class="text-center" width="52">P1</th>
+                <th class="text-center" width="52">P2</th>
+                <th class="text-center" width="52">P3</th>
+                <th class="text-center" width="52">P4</th>
+                <th class="text-center" width="52">P5</th>
+                <th class="text-center" width="52">P6</th>
+                <th class="text-center" width="52">P7</th>
+                <th class="text-center" width="52">P8</th>
+                <th>Catatan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($opmRecords as $i => $record)
+            <tr>
+                <td class="text-center">{{ $i + 1 }}</td>
+                <td>{{ $record->odp_name }}</td>
+                <td class="text-center">{{ $record->port_1 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_2 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_3 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_4 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_5 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_6 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_7 ?? '-' }}</td>
+                <td class="text-center">{{ $record->port_8 ?? '-' }}</td>
+                <td>{{ $record->notes ?? '-' }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @else
+    <p class="text-muted">Belum ada data OPM.</p>
+    @endif
+
     <div class="signature-block">
         <table>
             <tr>
@@ -554,8 +503,8 @@
                 </td>
                 <td>
                     <div class="signature-line"></div>
-                    <p class="text-center mb-0"><strong>Waspang</strong></p>
-                    <p class="text-center mb-0">NIK: {{ $commissioning->nik ?? '885776' }}</p>
+                    <p class="text-center mb-0"><strong>{{ $waspang->nama ?? 'Waspang' }}</strong></p>
+                    <p class="text-center mb-0">NIK: {{ $waspang->nik ?? '___________' }}</p>
                     <p class="text-center mb-0">PT TELKOM AKSES</p>
                 </td>
             </tr>
@@ -564,41 +513,48 @@
     </div>
 </div>
 
-<!-- PAGE 19-20: OTDR -->
+<!-- PAGE 19+: OTDR per ODP (dynamic) -->
+@if($otdrFiles->count() > 0)
+@php $otdrGrouped = $otdrFiles->groupBy('odp_name'); @endphp
+@foreach($otdrGrouped as $odpName => $files)
+<div class="page">
+    <div class="doc-header">
+        <h3>LAMPIRAN HASIL UKUR OTDR {{ strtoupper($odpName ?? 'OTDR') }}</h3>
+    </div>
+    @php renderPhotoMetaTable($projectMeta); @endphp
+
+    @foreach($files as $otdr)
+    @php
+        $otdrPath = str_replace('\', '/', storage_path('app/public/' . $otdr->file_path));
+        $ext = strtolower(pathinfo($otdr->original_name ?? $otdr->file_path, PATHINFO_EXTENSION));
+        $isImg = in_array($ext, ['jpg', 'jpeg', 'png']);
+        $otdrSrc = file_exists($otdrPath) ? 'file:///' . $otdrPath : '';
+    @endphp
+    <div style="margin-bottom:20px;text-align:center;">
+        @if($otdrSrc && $isImg)
+        <div class="photo-frame">
+            <img src="{{ $otdrSrc }}" alt="{{ $otdr->odp_name }}" style="width:100%;max-height:320px;object-fit:contain;">
+        </div>
+        @else
+        <div class="photo-placeholder" style="height:200px;">
+            [{{ $otdr->original_name ?? basename($otdr->file_path) }}]
+        </div>
+        @endif
+        <div class="photo-caption">{{ $otdr->original_name ?? basename($otdr->file_path) }}</div>
+        <div class="photo-paraf">PARAF</div>
+    </div>
+    @endforeach
+</div>
+@endforeach
+@else
 <div class="page">
     <div class="doc-header">
         <h3>BAB 10: HASIL UKUR OTDR</h3>
     </div>
     @php renderPhotoMetaTable($projectMeta); @endphp
-    
-    <div class=\"section-title\">10.1 Grafik OTDR ODP-PAT-FW/114</div>
-    @php $files114 = $otdrFiles->filter(fn($f) => str_contains(strtolower($f->nama_file), '114')); @endphp
-    @if($files114->count() > 0)
-        @foreach($files114->take(2) as $file)
-        <div class="photo-placeholder" style="height: 300px; margin-bottom: 10px;">
-            [Grafik OTDR 114: {{ $file->nama_file }}]
-        </div>
-        @endforeach
-    @else
-        <div class="photo-placeholder" style="height: 300px;">
-            [Screenshot Alat Ukur OTDR - ODP 114]
-        </div>
-    @endif
-    
-    <div class=\"section-title\">10.2 Grafik OTDR ODP-PAT-FW/115</div>
-    @php $files115 = $otdrFiles->filter(fn($f) => str_contains(strtolower($f->nama_file), '115')); @endphp
-    @if($files115->count() > 0)
-        @foreach($files115->take(2) as $file)
-        <div class="photo-placeholder" style="height: 300px; margin-bottom: 10px;">
-            [Grafik OTDR 115: {{ $file->nama_file }}]
-        </div>
-        @endforeach
-    @else
-        <div class="photo-placeholder" style="height: 300px;">
-            [Screenshot Alat Ukur OTDR - ODP 115]
-        </div>
-    @endif
+    <p class="text-muted">Belum ada file OTDR.</p>
 </div>
+@endif
 
 <!-- PAGE 21: MANCORE -->
 <div class="page">
