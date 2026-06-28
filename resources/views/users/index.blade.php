@@ -38,7 +38,7 @@
                         @endif
                     </td>
                     <td><strong style="color: #1f2937;">{{ $user->name }}</strong></td>
-                    <td style="color: #6b7280; font-size: 0.85rem;">{{ $user->email }}</td>
+                    <td>{{ $user->email }}</td>
                     <td>{{ $user->nik ?? '-' }}</td>
                     <td>
                         @php
