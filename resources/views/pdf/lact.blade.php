@@ -45,13 +45,21 @@ function renderInfoTable($meta) {
     echo '</table>';
 }
 
+function getImageSrc($filePath) {
+    if (empty($filePath)) return '';
+    $path = storage_path('app/public/' . $filePath);
+    if (!file_exists($path)) return '';
+    $ext  = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+    $mime = $ext === 'png' ? 'image/png' : ($ext === 'gif' ? 'image/gif' : 'image/jpeg');
+    return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path));
+}
+
 function renderPhotoGrid($photos, $limit = 6) {
     $items = is_array($photos) ? $photos : $photos->all();
     if (empty($items)) { echo '<p style="color:#999;font-size:9pt;">Belum ada foto.</p>'; return; }
     echo '<div class="photo-grid">';
     foreach (array_slice($items, 0, $limit) as $photo) {
-        $path = str_replace('\\', '/', storage_path('app/public/' . $photo->file_path));
-        $src  = file_exists($path) ? 'file:///' . $path : '';
+        $src = getImageSrc($photo->file_path);
         echo '<div class="photo-cell">';
         if ($src) echo '<div class="photo-frame"><img src="' . $src . '"></div>';
         else       echo '<div class="photo-placeholder">[Foto]</div>';
@@ -66,11 +74,10 @@ function renderLargePhotoGrid($photos) {
     $items = is_array($photos) ? $photos : $photos->all();
     if (empty($items)) { echo '<p style="color:#999;font-size:9pt;">Belum ada foto.</p>'; return; }
     foreach ($items as $photo) {
-        $path = str_replace('\\', '/', storage_path('app/public/' . $photo->file_path));
-        $src  = file_exists($path) ? 'file:///' . $path : '';
+        $src = getImageSrc($photo->file_path);
         echo '<div style="text-align:center;margin-bottom:18px;">';
         if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;max-height:280px;object-fit:contain;"></div>';
-        else       echo '<div class="photo-placeholder" style="height:200px;">[Foto]</div>';
+        else       echo '<div class="photo-placeholder" style="height:200px;">[Foto tidak ditemukan]</div>';
         if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
         echo '<div class="photo-paraf">PARAF</div>';
         echo '</div>';
@@ -95,12 +102,16 @@ function renderParaf($waspang, $branch, $tanggal, $implementer, $ctImgSrc = null
     echo '</tr></table>';
 }
 
-// CT image
+// CT image - base64
 $ctImgSrc = null;
 if (!empty($commissioningImages) && $commissioningImages->count() > 0) {
     $ci = $commissioningImages->first();
-    $cp = str_replace('\\', '/', storage_path('app/public/' . $ci->file_path));
-    if (file_exists($cp)) $ctImgSrc = 'file:///' . $cp;
+    $cp = storage_path('app/public/' . $ci->file_path);
+    if (file_exists($cp)) {
+        $ciExt  = strtolower(pathinfo($cp, PATHINFO_EXTENSION));
+        $ciMime = $ciExt === 'png' ? 'image/png' : 'image/jpeg';
+        $ctImgSrc = 'data:' . $ciMime . ';base64,' . base64_encode(file_get_contents($cp));
+    }
 }
 
 // Foto sections (matching Next.js FOTO_SECTIONS)
@@ -151,8 +162,13 @@ $tocItems[] = $no++ . '.   Berita Acara Lapangan & Dokumen Pendukung Lainnya';
         </table>
         @php $logoPath = public_path('images/logo.png'); @endphp
         @if(file_exists($logoPath))
+        @php
+        $logoExt  = strtolower(pathinfo($logoPath, PATHINFO_EXTENSION));
+        $logoMime = $logoExt === 'png' ? 'image/png' : 'image/jpeg';
+        $logoSrc  = 'data:' . $logoMime . ';base64,' . base64_encode(file_get_contents($logoPath));
+        @endphp
         <div style="margin:30px auto;">
-            <img src="file:///{{ str_replace('\\','/',$logoPath) }}" style="max-width:280px;max-height:140px;">
+            <img src="{{ $logoSrc }}" style="max-width:280px;max-height:140px;">
         </div>
         @else
         <div style="height:80px;"></div>
@@ -317,9 +333,13 @@ $secChunks = $secFotos->chunk($chunkSize);
     @php renderInfoTable($projectMeta); @endphp
     @foreach($chunk as $otdr)
     @php
-        $op  = str_replace('\\', '/', storage_path('app/public/' . $otdr->file_path));
+        $op  = storage_path('app/public/' . $otdr->file_path);
         $ext = strtolower(pathinfo($otdr->original_name ?? $otdr->file_path, PATHINFO_EXTENSION));
-        $os  = (file_exists($op) && in_array($ext, ['jpg','jpeg','png'])) ? 'file:///' . $op : '';
+        $os  = '';
+        if (file_exists($op) && in_array($ext, ['jpg','jpeg','png'])) {
+            $om = $ext === 'png' ? 'image/png' : 'image/jpeg';
+            $os = 'data:' . $om . ';base64,' . base64_encode(file_get_contents($op));
+        }
     @endphp
     <div style="text-align:center;margin-bottom:18px;">
         @if($os)
