@@ -7,12 +7,12 @@
     @csrf
     <div class="mb-3">
         <label class="form-label-soft">Email</label>
-        <input type="email" name="email" class="form-control-soft" required autofocus value="{{ old('email') }}" placeholder="email@telkom.co.id">
+        <input type="email" name="email" class="form-control-soft" required autofocus value="{{ old('email') }}">
         @error('email')<div class="form-error">{{ $message }}</div>@enderror
     </div>
     <div class="mb-3">
         <label class="form-label-soft">Password</label>
-        <input type="password" name="password" class="form-control-soft" required placeholder="••••••••">
+        <input type="password" name="password" class="form-control-soft" required>
         @error('password')<div class="form-error">{{ $message }}</div>@enderror
     </div>
     <div class="mb-3 form-check">
