@@ -326,7 +326,7 @@ $secChunks = $secFotos->chunk($chunkSize);
 
 {{-- ===== OTDR (2 per page) ===== --}}
 @if($otdrFiles->count() > 0)
-@php $otdrChunks = $otdrFiles->chunk(2); @endphp
+@php $otdrChunks = $otdrFiles->chunk(1); @endphp
 @foreach($otdrChunks as $chunk)
 <div class="page">
     <div class="section-title">LAMPIRAN HASIL UKUR OTDR</div>
