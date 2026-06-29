@@ -18,7 +18,7 @@ th { background:#f0f0f0; font-weight:bold; text-align:center; }
 .photo-grid { display:table; width:100%; }
 .photo-cell { display:table-cell; width:33%; padding:8px; text-align:center; vertical-align:top; }
 .photo-frame { border:1px solid #ccc; padding:3px; }
-.photo-frame img { width:100%; max-height:180px; object-fit:contain; }
+.photo-frame img { width:100%; height:115px; object-fit:contain; }
 .photo-placeholder { border:1px dashed #999; height:150px; display:flex; align-items:center; justify-content:center; color:#999; font-size:9pt; }
 .photo-caption { font-size:8.5pt; margin-top:4px; text-align:center; }
 .photo-paraf { font-size:9pt; font-weight:bold; text-align:center; margin-top:6px; }
@@ -76,7 +76,7 @@ function renderLargePhotoGrid($photos) {
     foreach ($items as $photo) {
         $src = getImageSrc($photo->file_path);
         echo '<div style="text-align:center;margin-bottom:18px;">';
-        if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;max-height:280px;object-fit:contain;"></div>';
+        if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;height:200px;object-fit:contain;"></div>';
         else       echo '<div class="photo-placeholder" style="height:200px;">[Foto tidak ditemukan]</div>';
         if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
         echo '<div class="photo-paraf">PARAF</div>';
