@@ -343,7 +343,7 @@ $secChunks = $secFotos->chunk($chunkSize);
             {{ $otdr->original_name ?? basename($otdr->file_path) }}
         </div>
         @endif
-        <div class="photo-caption"><strong>{{ $otdr->odp_name ?? '' }}</strong> — {{ $otdr->original_name ?? basename($otdr->file_path) }}</div>
+        <div class="photo-caption"><strong>{{ $otdr->odp_name ?? '' }}</strong></div>
 
     </div>
     @endforeach
