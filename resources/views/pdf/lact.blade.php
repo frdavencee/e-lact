@@ -76,7 +76,7 @@ function renderLargePhotoGrid($photos) {
     foreach ($items as $photo) {
         $src = getImageSrc($photo->file_path);
         echo '<div style="text-align:center;margin-bottom:18px;">';
-        if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;max-height:280px;object-fit:contain;"></div>';
+        if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;max-height:400px;object-fit:contain;"></div>';
         else       echo '<div class="photo-placeholder" style="height:200px;">[Foto tidak ditemukan]</div>';
         if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
 
