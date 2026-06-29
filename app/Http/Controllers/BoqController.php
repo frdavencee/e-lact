@@ -100,10 +100,7 @@ class BoqController extends Controller
             ]);
         }
 
-        if ($request->expectsJson()) {
-            return response()->json(['success' => true]);
-        }
-        return back()->with('success', 'BOQ berhasil disimpan.');
+        return response()->json(['success' => true]);
     }
 
     public function update(Request $request, Lokasi $lokasi, BoqItem $boq)
