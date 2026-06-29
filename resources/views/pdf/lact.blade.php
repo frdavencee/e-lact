@@ -333,21 +333,17 @@ $secChunks = $secFotos->chunk($chunkSize);
     @php renderInfoTable($projectMeta); @endphp
     @foreach($chunk as $otdr)
     @php
-        $op  = storage_path('app/public/' . $otdr->file_path);
-        $ext = strtolower(pathinfo($otdr->original_name ?? $otdr->file_path, PATHINFO_EXTENSION));
-        $os  = '';
-        if (file_exists($op) && in_array($ext, ['jpg','jpeg','png'])) {
-            $om = $ext === 'png' ? 'image/png' : 'image/jpeg';
-            $os = 'data:' . $om . ';base64,' . base64_encode(file_get_contents($op));
-        }
+        $os = getImageSrc($otdr->file_path);
     @endphp
     <div style="text-align:center;margin-bottom:18px;">
         @if($os)
         <div class="photo-frame"><img src="{{ $os }}" style="width:100%;max-height:280px;object-fit:contain;"></div>
         @else
-        <div class="photo-placeholder" style="height:200px;">[{{ $otdr->original_name ?? basename($otdr->file_path) }}]</div>
+        <div style="border:1px dashed #bbb;height:180px;padding-top:72px;text-align:center;color:#666;font-size:9pt;">
+            {{ $otdr->original_name ?? basename($otdr->file_path) }}
+        </div>
         @endif
-        <div class="photo-caption">{{ $otdr->original_name ?? basename($otdr->file_path) }} &mdash; {{ $otdr->odp_name ?? '' }}</div>
+        <div class="photo-caption"><strong>{{ $otdr->odp_name ?? '' }}</strong> — {{ $otdr->original_name ?? basename($otdr->file_path) }}</div>
 
     </div>
     @endforeach
