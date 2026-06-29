@@ -230,7 +230,7 @@ $tocItems[] = $no++ . '.   Berita Acara Lapangan & Dokumen Pendukung Lainnya';
         <thead>
             <tr>
                 <th width="30">No</th>
-                <th width="120">Kode Item</th>
+                <th width="70">Kode Item</th>
                 <th>Nama Item</th>
                 <th width="40">Satuan</th>
                 <th width="40">DRM</th>
