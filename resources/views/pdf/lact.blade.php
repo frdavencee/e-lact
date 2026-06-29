@@ -64,7 +64,7 @@ function renderPhotoGrid($photos, $limit = 6) {
         if ($src) echo '<div class="photo-frame"><img src="' . $src . '"></div>';
         else       echo '<div class="photo-placeholder">[Foto]</div>';
         if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
-        echo '<div class="photo-paraf">PARAF</div>';
+
         echo '</div>';
     }
     echo '</div>';
@@ -79,7 +79,7 @@ function renderLargePhotoGrid($photos) {
         if ($src) echo '<div class="photo-frame"><img src="' . $src . '" style="width:100%;max-height:280px;object-fit:contain;"></div>';
         else       echo '<div class="photo-placeholder" style="height:200px;">[Foto tidak ditemukan]</div>';
         if (!empty($photo->label)) echo '<div class="photo-caption">' . e($photo->label) . '</div>';
-        echo '<div class="photo-paraf">PARAF</div>';
+
         echo '</div>';
     }
 }
@@ -348,7 +348,7 @@ $secChunks = $secFotos->chunk($chunkSize);
         <div class="photo-placeholder" style="height:200px;">[{{ $otdr->original_name ?? basename($otdr->file_path) }}]</div>
         @endif
         <div class="photo-caption">{{ $otdr->original_name ?? basename($otdr->file_path) }} &mdash; {{ $otdr->odp_name ?? '' }}</div>
-        <div class="photo-paraf">PARAF</div>
+
     </div>
     @endforeach
     @php renderParaf($waspang, $kota_ttd, $tanggal_ttd, $project->implementer ?? 'PT TELKOM AKSES', $ctImgSrc); @endphp
