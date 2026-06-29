@@ -54,7 +54,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     function addMarkingRow() {
         const table = document.getElementById('marking-table').querySelector('tbody');
@@ -86,4 +86,4 @@
             .catch(() => alert('Gagal menyimpan marking kabel'));
     }
 </script>
-@endsection
+@endpush

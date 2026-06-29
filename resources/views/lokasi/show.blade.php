@@ -237,7 +237,17 @@ $fotoSections = [
         fetch('/lokasi/' + LOKASI_SHOW + '/foto/' + id, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': CSRF_SHOW, 'X-Requested-With': 'XMLHttpRequest' },
-        }).then(r => { if (r.ok) location.reload(); });
+        })
+        .then(r => {
+            if (r.ok) {
+                location.reload();
+            } else {
+                alert('Gagal menghapus foto. Status: ' + r.status);
+            }
+        })
+        .catch(err => {
+            alert('Error: ' + err.message);
+        });
     };
 })();
 </script>
