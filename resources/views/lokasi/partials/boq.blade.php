@@ -110,12 +110,25 @@
         showBoqMsg('Menyimpan...', true);
         fetch('/lokasi/' + LOKASI_BOQ + '/boq', { method: 'POST', body: form })
             .then(r => r.json())
-            .then(d => showBoqMsg(d.success ? 'BOQ berhasil disimpan.' : 'Gagal menyimpan.', !!d.success))
-            .catch(() => showBoqMsg('Gagal menyimpan BOQ.', false));
+            .then(d => {
+                if (d.success) {
+                    showBoqMsg('BOQ berhasil disimpan!', true);
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showBoqMsg('Gagal menyimpan: ' + (d.message ?? 'unknown error'), false);
+                }
+            })
+            .catch(err => showBoqMsg('Gagal menyimpan BOQ: ' + err.message, false));
     };
 
     // Excel Import
-    document.getElementById('boqImportBtn').addEventListener('click', () => document.getElementById('boqExcelInput').click());
+    document.getElementById('boqImportBtn').addEventListener('click', () => {
+        if (typeof XLSX === 'undefined') {
+            alert('Library Excel (SheetJS) belum dimuat. Pastikan koneksi internet aktif dan refresh halaman.');
+            return;
+        }
+        document.getElementById('boqExcelInput').click();
+    });
     document.getElementById('boqExcelInput').addEventListener('change', function() {
         const file = this.files[0];
         if (!file) return;
@@ -142,6 +155,7 @@
             if (colDes === -1 || colDrm === -1) { alert('Format Excel tidak dikenali.'); return; }
 
             const toNum = v => { const n = parseFloat(String(v ?? '').trim()); return isNaN(n) ? '' : String(n); };
+            const esc   = v => String(v ?? '').trim().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
             const tbody = document.getElementById('boq-partial-tbody');
             tbody.innerHTML = '';
             let idx = 0;
@@ -151,9 +165,9 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${idx+1}</td>
-                    <td><input type="text" class="form-control-soft input-mono" style="padding:0.35rem 0.5rem;font-size:0.8rem;" name="boq[${idx}][kode_item]" value="${String(row[colDes]??'').trim()}"></td>
-                    <td><input type="text" class="form-control-soft" style="padding:0.35rem 0.5rem;font-size:0.8rem;" name="boq[${idx}][nama_item]" value="${String(row[colUraian]??'').trim()}"></td>
-                    <td><input type="text" class="form-control-soft input-mono" style="padding:0.35rem 0.5rem;font-size:0.8rem;" name="boq[${idx}][satuan]" value="${String(row[colSatuan]??'').trim()}"></td>
+                    <td><input type="text" class="form-control-soft input-mono" style="padding:0.35rem 0.5rem;font-size:0.8rem;" name="boq[${idx}][kode_item]" value="${esc(row[colDes])}"></td>
+                    <td><input type="text" class="form-control-soft" style="padding:0.35rem 0.5rem;font-size:0.8rem;" name="boq[${idx}][nama_item]" value="${esc(row[colUraian])}"></td>
+                    <td><input type="text" class="form-control-soft input-mono" style="padding:0.35rem 0.5rem;font-size:0.8rem;" name="boq[${idx}][satuan]" value="${esc(row[colSatuan])}"></td>
                     <td><input type="number" step="any" class="form-control-soft input-mono" style="padding:0.35rem 0.3rem;font-size:0.8rem;text-align:center;" name="boq[${idx}][volume_drm]" value="${toNum(row[colDrm])}"></td>
                     <td><input type="number" step="any" class="form-control-soft input-mono" style="padding:0.35rem 0.3rem;font-size:0.8rem;text-align:center;" name="boq[${idx}][volume_aktual]" value="${toNum(row[colAktual])}"></td>
                     <td><input type="number" step="any" class="form-control-soft input-mono" style="padding:0.35rem 0.3rem;font-size:0.8rem;text-align:center;" name="boq[${idx}][volume_tambah]" value="${colTambah>=0?toNum(row[colTambah]):''}"></td>
