@@ -229,9 +229,53 @@ $fotoSections = [
 @push('scripts')
 <script>
 (function () {
-    const CSRF_SHOW = '{{ csrf_token() }}';
+    const CSRF_SHOW  = '{{ csrf_token() }}';
     const LOKASI_SHOW = {{ $lokasi->id }};
+    const SECTION_KEY = 'lokasi_section_' + LOKASI_SHOW;
 
+    // ── Simpan section aktif lalu reload ───────────────────────────────
+    window.reloadPage = function () {
+        const open = document.querySelector('#lokasiAccordion .collapse.show');
+        if (open) sessionStorage.setItem(SECTION_KEY, open.id);
+        location.reload();
+    };
+
+    // ── Simpan section saat form di-submit (foto, CT, project, OTDR) ──
+    document.addEventListener('submit', function () {
+        const open = document.querySelector('#lokasiAccordion .collapse.show');
+        if (open) sessionStorage.setItem(SECTION_KEY, open.id);
+    });
+
+    // ── Simpan section saat accordion dibuka ───────────────────────────
+    const acc = document.getElementById('lokasiAccordion');
+    if (acc) {
+        acc.addEventListener('show.bs.collapse', function (e) {
+            sessionStorage.setItem(SECTION_KEY, e.target.id);
+        });
+    }
+
+    // ── Restore section saat page load ─────────────────────────────────
+    const saved = sessionStorage.getItem(SECTION_KEY);
+    if (saved) {
+        sessionStorage.removeItem(SECTION_KEY);
+        setTimeout(function () {
+            const el = document.getElementById(saved);
+            if (!el) return;
+            // Tutup section default (collapse-info) lalu buka yang tersimpan
+            const currentOpen = document.querySelector('#lokasiAccordion .collapse.show');
+            if (currentOpen && currentOpen.id !== saved) {
+                bootstrap.Collapse.getOrCreateInstance(currentOpen).hide();
+            }
+            bootstrap.Collapse.getOrCreateInstance(el).show();
+            // Scroll ke section tersebut
+            setTimeout(function () {
+                const wrap = el.closest('.acc-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 350);
+        }, 100);
+    }
+
+    // ── Delete foto ────────────────────────────────────────────────────
     window.removeFoto = function (id) {
         if (!confirm('Hapus foto ini?')) return;
         fetch('/lokasi/' + LOKASI_SHOW + '/foto/' + id, {
@@ -240,14 +284,12 @@ $fotoSections = [
         })
         .then(r => {
             if (r.ok) {
-                location.reload();
+                window.reloadPage();
             } else {
                 alert('Gagal menghapus foto. Status: ' + r.status);
             }
         })
-        .catch(err => {
-            alert('Error: ' + err.message);
-        });
+        .catch(err => alert('Error: ' + err.message));
     };
 })();
 </script>

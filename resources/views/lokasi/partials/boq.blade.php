@@ -113,7 +113,7 @@
             .then(d => {
                 if (d.success) {
                     showBoqMsg('BOQ berhasil disimpan!', true);
-                    setTimeout(() => location.reload(), 1000);
+                    setTimeout(() => window.reloadPage(), 1000);
                 } else {
                     showBoqMsg('Gagal menyimpan: ' + (d.message ?? 'unknown error'), false);
                 }
