@@ -1111,11 +1111,24 @@
 </head>
 <body @if(Auth::check()) class="has-sidebar" @endif>
     @if(Auth::check())
+    <!-- Floating open button (muncul saat sidebar tertutup) -->
+    <button id="sidebarOpenBtn" onclick="toggleSidebar()" title="Buka menu"
+        style="display:none;position:fixed;left:0;top:14px;z-index:1060;background:white;border:1px solid #e5e7eb;border-radius:0 8px 8px 0;padding:0.5rem 0.6rem;cursor:pointer;box-shadow:2px 0 6px rgba(0,0,0,.1);align-items:center;">
+        <i class="bi bi-list" style="font-size:1.1rem;color:#4b5563;"></i>
+    </button>
     <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-brand">
-            <h4>e-LACT</h4>
-            <small>Telkom Indonesia</small>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                    <h4>e-LACT</h4>
+                    <small>Telkom Indonesia</small>
+                </div>
+                <button onclick="toggleSidebar()" title="Tutup menu"
+                    style="background:transparent;border:none;cursor:pointer;color:#9ca3af;padding:4px 6px;border-radius:6px;line-height:1;">
+                    <i class="bi bi-x-lg" style="font-size:1rem;"></i>
+                </button>
+            </div>
         </div>
         <ul class="sidebar-nav">
             <li class="nav-item">
@@ -1178,9 +1191,6 @@
         @if(Auth::check())
         <header class="top-header">
             <div class="d-flex align-items-center gap-3">
-                <button onclick="toggleSidebar()" style="background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;color:#4b5563;" title="Toggle menu">
-                    <i class="bi bi-list" style="font-size:1.25rem;"></i>
-                </button>
                 <p style="font-size:0.85rem;color:#9ca3af;margin:0;">Sistem Manajemen Dokumen LACT</p>
             </div>
             <div class="d-flex align-items-center gap-2">
@@ -1218,12 +1228,24 @@
 <script>
 (function() {
     const KEY = 'sidebar_collapsed';
-    if (localStorage.getItem(KEY) === '1') {
-        document.body.classList.add('sidebar-collapsed');
+    const openBtn = document.getElementById('sidebarOpenBtn');
+
+    function applyState(collapsed) {
+        if (collapsed) {
+            document.body.classList.add('sidebar-collapsed');
+            if (openBtn) openBtn.style.display = 'flex';
+        } else {
+            document.body.classList.remove('sidebar-collapsed');
+            if (openBtn) openBtn.style.display = 'none';
+        }
     }
+
+    applyState(localStorage.getItem(KEY) === '1');
+
     window.toggleSidebar = function() {
-        document.body.classList.toggle('sidebar-collapsed');
-        localStorage.setItem(KEY, document.body.classList.contains('sidebar-collapsed') ? '1' : '0');
+        const collapsed = !document.body.classList.contains('sidebar-collapsed');
+        localStorage.setItem(KEY, collapsed ? '1' : '0');
+        applyState(collapsed);
     };
 })();
 </script>
