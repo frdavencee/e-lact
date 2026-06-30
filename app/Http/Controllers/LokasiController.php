@@ -30,9 +30,12 @@ class LokasiController extends Controller
 
     public function create()
     {
-        $branchList = \App\Models\Branch::orderBy('name')->get();
-
-        return view('lokasi.create', compact('branchList'));
+        $branches  = \App\Models\Branch::with(['lokasi' => fn($q) => $q->select('id','branch_id','name','code')->orderBy('code')])->orderBy('name')->get();
+        $branchList = $branches;
+        $branchData = $branches->mapWithKeys(fn($b) => [
+            $b->id => $b->lokasi->map(fn($l) => ['code' => $l->code, 'name' => $l->name])->values()
+        ]);
+        return view('lokasi.create', compact('branchList', 'branchData'));
     }
 
     public function store(Request $request)
