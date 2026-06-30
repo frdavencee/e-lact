@@ -398,7 +398,7 @@
         .form-select-soft {
             width: 100%;
             padding: 0.7rem 1rem;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
             transition: var(--transition);
