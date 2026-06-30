@@ -8,6 +8,9 @@
     <button type="button" onclick="addBoqRow()" class="btn-soft-secondary btn-sm">
         <i class="bi bi-plus"></i> Tambah Baris
     </button>
+    <button type="button" onclick="hapusSemuaBoq()" class="btn-soft-secondary btn-sm" style="color:#dc2626;border-color:#dc2626;">
+        <i class="bi bi-trash"></i> Hapus Semua
+    </button>
     <button type="button" onclick="saveBoq()" class="btn-primary-gradient btn-sm">
         <i class="bi bi-save"></i> Simpan BOQ
     </button>
@@ -100,6 +103,13 @@
         el.style.display = 'flex';
         setTimeout(() => { el.style.display = 'none'; }, 3500);
     }
+
+    window.hapusSemuaBoq = function() {
+        if (!confirm('Hapus semua data BOQ?')) return;
+        document.getElementById('boq-partial-tbody').innerHTML =
+            '<tr id="boq-empty-row"><td colspan="10"><div class="empty-state" style="padding:1.5rem;"><i class="bi bi-table"></i><p>Belum ada data BOQ.</p></div></td></tr>';
+        window.saveBoq();
+    };
 
     window.saveBoq = function() {
         const rows = Array.from(document.querySelectorAll('#boq-partial-tbody tr:not(#boq-empty-row)'));
