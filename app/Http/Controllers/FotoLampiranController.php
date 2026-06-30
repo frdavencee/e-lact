@@ -39,6 +39,13 @@ class FotoLampiranController extends Controller
         return back()->with('success', 'Foto lampiran berhasil diupload.');
     }
 
+    public function updateLabel(Lokasi $lokasi, FotoLampiran $foto, Request $request)
+    {
+        $request->validate(['label' => 'nullable|string|max:255']);
+        $foto->update(['label' => $request->label ?? '']);
+        return response()->json(['success' => true]);
+    }
+
     public function destroy(Lokasi $lokasi, FotoLampiran $foto)
     {
         Storage::disk('public')->delete($foto->file_path);

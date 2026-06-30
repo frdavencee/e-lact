@@ -51,8 +51,13 @@ $single    = count($sectionCategories) === 1;
     <div class="col-6 col-md-3">
         <div class="photo-tile-modern">
             <img src="{{ asset('storage/' . $foto->file_path) }}" alt="{{ $foto->label }}">
-            <div class="photo-overlay-modern">
-                <small style="color:#fff;font-size:.7rem;">{{ $foto->label ?: ($catMap[$foto->kategori] ?? $foto->kategori) }}</small>
+            <div class="photo-overlay-modern" style="opacity:1;background:rgba(0,0,0,0.45);">
+                <input type="text"
+                    class="photo-label-input"
+                    value="{{ $foto->label }}"
+                    placeholder="Tambah label..."
+                    onblur="updateFotoLabel({{ $foto->id }}, this.value)"
+                    onclick="event.stopPropagation()">
             </div>
             <button type="button" onclick="removeFoto({{ $foto->id }})" class="photo-remove-btn">×</button>
         </div>

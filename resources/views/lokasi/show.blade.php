@@ -281,6 +281,14 @@ $fotoSections = [
     }
 
     // ── Delete foto ────────────────────────────────────────────────────
+    window.updateFotoLabel = function(id, label) {
+        fetch('/lokasi/' + LOKASI_SHOW + '/foto/' + id + '/label', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_SHOW },
+            body: JSON.stringify({ label: label }),
+        });
+    };
+
     window.removeFoto = function (id) {
         if (!confirm('Hapus foto ini?')) return;
         fetch('/lokasi/' + LOKASI_SHOW + '/foto/' + id, {

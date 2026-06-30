@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified', 'role:admin,petugas'])->group(function ()
 
         Route::get('foto', [LokasiController::class, 'foto'])->name('lokasi.foto');
         Route::post('foto', [FotoLampiranController::class, 'store'])->name('foto.store');
+        Route::put('foto/{foto}/label', [FotoLampiranController::class, 'updateLabel'])->name('foto.label');
         Route::delete('foto/{foto}', [FotoLampiranController::class, 'destroy'])->name('foto.destroy');
 
         Route::get('opm', [LokasiController::class, 'opm'])->name('lokasi.opm');
