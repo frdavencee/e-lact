@@ -43,9 +43,10 @@
                     <tr>
                         <th width="60">#</th>
                         <th>Nama Branch</th>
-                        <th width="120">Kode</th>
-                        <th width="100">Lokasi</th>
-                        <th width="100">Aksi</th>
+                        <th width="100">Kode Branch</th>
+                        <th>Lokasi</th>
+                        <th>Kode Lokasi</th>
+                        <th width="80">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,7 +55,22 @@
                         <td>{{ $branches->firstItem() + $i }}</td>
                         <td><strong>{{ $branch->name }}</strong></td>
                         <td><span class="badge-modern-sm" style="background:#dbeafe;color:#1e40af;font-family:monospace;">{{ $branch->code }}</span></td>
-                        <td><span class="badge-modern badge-info">{{ $branch->lokasi_count }} lokasi</span></td>
+                        <td>
+                            @forelse($branch->lokasi as $lok)
+                            <div style="font-size:0.82rem;margin-bottom:2px;">{{ $lok->name }}</div>
+                            @empty
+                            <span style="color:#9ca3af;font-size:0.82rem;">-</span>
+                            @endforelse
+                        </td>
+                        <td>
+                            @forelse($branch->lokasi as $lok)
+                            <div style="margin-bottom:2px;">
+                                <span class="badge-modern-sm" style="background:#f3f4f6;color:#374151;font-family:monospace;font-size:0.72rem;">{{ $lok->code }}</span>
+                            </div>
+                            @empty
+                            <span style="color:#9ca3af;font-size:0.82rem;">-</span>
+                            @endforelse
+                        </td>
                         <td>
                             <div class="action-group">
                                 <button class="action-icon-btn btn-edit" title="Edit" onclick="openEditModal({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->code) }}')">
@@ -69,7 +85,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="empty-state"><i class="bi bi-diagram-3"></i><p>Belum ada data branch.</p></div>
                         </td>
                     </tr>

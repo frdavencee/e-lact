@@ -17,7 +17,8 @@ class BranchController extends Controller
                   ->orWhere('code', 'like', "%{$keyword}%");
             });
         }
-        $branches = $query->withCount('lokasi')->latest()->paginate(15);
+        $branches = $query->with(['lokasi' => fn($q) => $q->select('id','branch_id','name','code')->orderBy('code')])
+                         ->withCount('lokasi')->latest()->paginate(15);
         return view('branch.index', compact('branches'));
     }
 
