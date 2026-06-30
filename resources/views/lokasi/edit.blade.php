@@ -15,20 +15,22 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label-soft">Branch</label>
-                            <select name="branch_id" class="form-select-soft">
+                            <select name="branch_id" id="branchSelect" class="form-select-soft">
                                 <option value="">-- Tanpa Branch --</option>
-                                @foreach($branchList as $branch)
-                                <option value="{{ $branch->id }}" {{ old('branch_id', $lokasi->branch_id) == $branch->id ? 'selected' : '' }}>{{ $branch->name }}</option>
+                                @foreach($branchList as $b)
+                                <option value="{{ $b->id }}" {{ old('branch_id', $lokasi->branch_id) == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label-soft">Kode Lokasi <span class="text-danger">*</span></label>
-                            <input type="text" name="kode_lokasi" class="form-control-soft" required value="{{ old('kode_lokasi', $lokasi->kode_lokasi) }}">
+                            <select name="kode_lokasi" id="kodeLokasiSelect" class="form-select-soft" required>
+                                <option value="{{ old('kode_lokasi', $lokasi->code) }}">{{ old('kode_lokasi', $lokasi->code) }}</option>
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label-soft">Nama Lokasi <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_lokasi" class="form-control-soft" required value="{{ old('nama_lokasi', $lokasi->nama_lokasi) }}">
+                            <input type="text" name="nama_lokasi" id="namaLokasiInput" class="form-control-soft" required value="{{ old('nama_lokasi', $lokasi->name) }}">
                         </div>
                         <div class="col-md-12">
                             <label class="form-label-soft">Status</label>
@@ -49,3 +51,40 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+const branchData = {!! json_encode($branchData) !!};
+const currentCode = '{{ $lokasi->code }}';
+const currentName = '{{ addslashes($lokasi->name) }}';
+
+function populateKode(branchId, selectedCode) {
+    const kodeSelect = document.getElementById('kodeLokasiSelect');
+    kodeSelect.innerHTML = '<option value="">-- Pilih Kode Lokasi --</option>';
+    if (branchId && branchData[branchId]) {
+        branchData[branchId].forEach(lok => {
+            const opt = document.createElement('option');
+            opt.value = lok.code;
+            opt.textContent = lok.code;
+            opt.dataset.name = lok.name;
+            if (lok.code === selectedCode) opt.selected = true;
+            kodeSelect.appendChild(opt);
+        });
+    }
+}
+
+document.getElementById('branchSelect').addEventListener('change', function () {
+    populateKode(this.value, '');
+    document.getElementById('namaLokasiInput').value = '';
+});
+
+document.getElementById('kodeLokasiSelect').addEventListener('change', function () {
+    const opt = this.options[this.selectedIndex];
+    if (opt.dataset.name) document.getElementById('namaLokasiInput').value = opt.dataset.name;
+});
+
+// Pre-populate on load
+const initialBranch = document.getElementById('branchSelect').value;
+if (initialBranch) populateKode(initialBranch, currentCode);
+</script>
+@endpush

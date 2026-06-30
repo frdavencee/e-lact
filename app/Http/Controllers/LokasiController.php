@@ -117,9 +117,12 @@ class LokasiController extends Controller
 
     public function edit(Lokasi $lokasi)
     {
-        $branchList = \App\Models\Branch::orderBy('name')->get();
-
-        return view('lokasi.edit', compact('lokasi', 'branchList'));
+        $branches   = \App\Models\Branch::with(['lokasi' => fn($q) => $q->select('id','branch_id','name','code')->orderBy('code')])->orderBy('name')->get();
+        $branchList = $branches;
+        $branchData = $branches->mapWithKeys(fn($b) => [
+            $b->id => $b->lokasi->map(fn($l) => ['code' => $l->code, 'name' => $l->name])->values()
+        ]);
+        return view('lokasi.edit', compact('lokasi', 'branchList', 'branchData'));
     }
 
     public function update(Request $request, Lokasi $lokasi)
