@@ -170,10 +170,6 @@ $fotoSections = [
         <div id="collapse-marking" class="collapse" data-bs-parent="#lokasiAccordion">
             <div class="acc-body">
                 @include('lokasi.partials.marking_kabel')
-                <div style="border-top:1px solid #f3f4f6;margin-top:1.25rem;padding-top:1.25rem;">
-                    <p style="font-size:.8rem;font-weight:600;color:#6b7280;margin-bottom:.75rem;">FOTO MARKING KABEL</p>
-                    @include('lokasi.partials.foto_section', ['sectionCategories' => [['value'=>'marking_kabel','label'=>'Marking Kabel']]])
-                </div>
             </div>
         </div>
     </div>
