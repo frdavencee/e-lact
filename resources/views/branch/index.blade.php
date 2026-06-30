@@ -133,11 +133,6 @@
 
 @push('scripts')
 <script>
-document.getElementById('lokasiSelect').addEventListener('change', function() {
-    const opt = this.options[this.selectedIndex];
-    document.getElementById('kodeLokasiInput').value = opt.getAttribute('data-code') || '';
-});
-
 function openEditModal(id, name) {
     document.getElementById('editForm').action = '/branch/' + id;
     document.getElementById('editName').value = name;
