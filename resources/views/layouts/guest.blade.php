@@ -71,7 +71,7 @@
         .form-control-soft {
             width: 100%;
             padding: 0.7rem 1rem;
-            border: 1px solid #e5e7eb;
+            border: 2px solid #e5e7eb;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
             transition: var(--transition);
