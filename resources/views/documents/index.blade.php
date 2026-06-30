@@ -32,10 +32,10 @@
                     <td>{{ $doc->generated_at ? $doc->generated_at->format('d/m/Y H:i') : '-' }}</td>
                     <td>
                         <div class="action-group">
-                            <a href="{{ route('documents.show', $doc) }}" class="action-icon-btn btn-view" title="Download">
+                            <a href="{{ route('documents.show', ['document' => $doc->id]) }}" class="action-icon-btn btn-view" title="Download">
                                 <i class="bi bi-download"></i>
                             </a>
-                            <form action="{{ route('documents.destroy', $doc) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus dokumen ini?')">
+                            <form action="{{ route('documents.destroy', ['document' => $doc->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus dokumen ini?')">
                                 @csrf @method('DELETE')
                                 <button class="action-icon-btn btn-delete" title="Hapus"><i class="bi bi-trash"></i></button>
                             </form>
