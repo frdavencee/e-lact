@@ -58,10 +58,6 @@ $fotoSections = [
     ['id'=>'closure-splitter','title'=>'Lampiran Evidence Closure & Spliter 1:4','categories'=>[
         ['value'=>'closure_splitter','label'=>'Closure & Splitter'],
     ]],
-    ['id'=>'opm-foto','title'=>'Lampiran Evident Hasil Ukur OPM','categories'=>[
-        ['value'=>'opm_hasil_ukur','label'=>'Hasil Ukur OPM'],
-        ['value'=>'data_pengukuran_opm','label'=>'Data Pengukuran OPM'],
-    ]],
     ['id'=>'mancore','title'=>'Lampiran Mancore','categories'=>[
         ['value'=>'mancore','label'=>'Mancore'],
     ]],
