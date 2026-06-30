@@ -60,8 +60,6 @@ $fotoSections = [
     ]],
     ['id'=>'opm-foto','title'=>'Lampiran Evident Hasil Ukur OPM','categories'=>[
         ['value'=>'opm_hasil_ukur','label'=>'Hasil Ukur OPM'],
-    ]],
-    ['id'=>'data-pengukuran-opm','title'=>'Lampiran Data Pengukuran OPM','categories'=>[
         ['value'=>'data_pengukuran_opm','label'=>'Data Pengukuran OPM'],
     ]],
     ['id'=>'mancore','title'=>'Lampiran Mancore','categories'=>[
