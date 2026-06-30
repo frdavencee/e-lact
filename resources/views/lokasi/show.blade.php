@@ -185,9 +185,8 @@ $fotoSections = [
             </div>
         </div>
     </div>
-    @endforeach
-
-    {{-- 13: DATA OPM --}}
+    @if($fs['id'] === 'evidence-aksesoris')
+    {{-- OPM section disisipkan setelah Lampiran Evidence Aksesoris --}}
     <div class="acc-wrap">
         <button type="button" class="acc-btn collapsed d-flex justify-content-between align-items-center w-100 px-4 py-3 border-0 bg-white text-start"
             data-bs-toggle="collapse" data-bs-target="#collapse-opm">
@@ -203,6 +202,8 @@ $fotoSections = [
             </div>
         </div>
     </div>
+    @endif
+    @endforeach
 
     {{-- 14: FILE OTDR --}}
     <div class="acc-wrap">
