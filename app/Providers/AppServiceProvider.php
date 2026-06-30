@@ -2,23 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\Personel;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        // Bind {waspang} route parameter to Personel model
+        Route::model('waspang', Personel::class);
     }
 }
