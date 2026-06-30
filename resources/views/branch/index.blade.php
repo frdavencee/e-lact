@@ -13,7 +13,7 @@
     <div class="detail-card-body">
         <form method="POST" action="{{ route('branch.store') }}" class="row g-3">
             @csrf
-            <div class="col-md-5">
+            <div class="col-md-8">
                 <label class="form-label-soft">Nama Branch</label>
                 <input type="text" name="name" class="form-control-soft" value="{{ old('name') }}" placeholder="Branch Semarang" required>
                 @error('name')<p style="color:#dc2626;font-size:0.8rem;margin-top:0.25rem;">{{ $message }}</p>@enderror
