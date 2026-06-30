@@ -134,6 +134,19 @@
 
         .has-sidebar .main-wrapper {
             margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+
+        body.sidebar-collapsed .sidebar {
+            transform: translateX(calc(-1 * var(--sidebar-width)));
+        }
+
+        body.sidebar-collapsed.has-sidebar .main-wrapper {
+            margin-left: 0;
         }
 
         .top-header {
@@ -1164,7 +1177,12 @@
     <div class="main-wrapper">
         @if(Auth::check())
         <header class="top-header">
-            <p style="font-size:0.85rem;color:#9ca3af;margin:0;">Sistem Manajemen Dokumen LACT</p>
+            <div class="d-flex align-items-center gap-3">
+                <button onclick="toggleSidebar()" style="background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;color:#4b5563;" title="Toggle menu">
+                    <i class="bi bi-list" style="font-size:1.25rem;"></i>
+                </button>
+                <p style="font-size:0.85rem;color:#9ca3af;margin:0;">Sistem Manajemen Dokumen LACT</p>
+            </div>
             <div class="d-flex align-items-center gap-2">
                 <span class="user-badge" style="font-size:0.75rem;padding:0.3rem 0.7rem;">
                     <i class="bi bi-shield-check"></i>
@@ -1197,5 +1215,17 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
+<script>
+(function() {
+    const KEY = 'sidebar_collapsed';
+    if (localStorage.getItem(KEY) === '1') {
+        document.body.classList.add('sidebar-collapsed');
+    }
+    window.toggleSidebar = function() {
+        document.body.classList.toggle('sidebar-collapsed');
+        localStorage.setItem(KEY, document.body.classList.contains('sidebar-collapsed') ? '1' : '0');
+    };
+})();
+</script>
 </body>
 </html>
