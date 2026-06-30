@@ -49,17 +49,20 @@ $single    = count($sectionCategories) === 1;
 <div class="row g-2 mb-2">
     @foreach($katFotos as $foto)
     <div class="col-6 col-md-3">
-        <div class="photo-tile-modern">
-            <img src="{{ asset('storage/' . $foto->file_path) }}" alt="{{ $foto->label }}">
-            <div class="photo-overlay-modern" style="opacity:1;background:rgba(0,0,0,0.45);">
+        <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:white;">
+            <div style="position:relative;">
+                <img src="{{ asset('storage/' . $foto->file_path) }}" alt="{{ $foto->label }}"
+                    style="width:100%;height:110px;object-fit:cover;display:block;">
+                <button type="button" onclick="removeFoto({{ $foto->id }})"
+                    style="position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(220,38,38,0.85);color:#fff;font-size:0.75rem;cursor:pointer;line-height:22px;text-align:center;">×</button>
+            </div>
+            <div style="padding:0.35rem 0.5rem;border-top:1px solid #f3f4f6;">
                 <input type="text"
-                    class="photo-label-input"
                     value="{{ $foto->label }}"
                     placeholder="Tambah label..."
                     onblur="updateFotoLabel({{ $foto->id }}, this.value)"
-                    onclick="event.stopPropagation()">
+                    style="width:100%;border:none;background:transparent;font-size:0.75rem;color:#374151;outline:none;padding:0;">
             </div>
-            <button type="button" onclick="removeFoto({{ $foto->id }})" class="photo-remove-btn">×</button>
         </div>
     </div>
     @endforeach
