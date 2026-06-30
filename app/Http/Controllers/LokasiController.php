@@ -38,26 +38,17 @@ class LokasiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'branch' => 'nullable|string|max:255',
+            'branch_id'   => 'nullable|exists:branches,id',
             'kode_lokasi' => 'required|string|max:255|unique:locations,code',
             'nama_lokasi' => 'required|string|max:255',
-            'status' => 'required|in:belum,draft,siap,generated',
+            'status'      => 'required|in:belum,draft,siap,generated',
         ]);
 
-        $branchId = null;
-        if (!empty($validated['branch'])) {
-            $branch = \App\Models\Branch::where('name', $validated['branch'])->first();
-            if (!$branch) {
-                $branch = \App\Models\Branch::create(['name' => $validated['branch']]);
-            }
-            $branchId = $branch->id;
-        }
-
         Lokasi::create([
-            'branch_id' => $branchId,
-            'code' => $validated['kode_lokasi'],
-            'name' => $validated['nama_lokasi'],
-            'status' => $validated['status'],
+            'branch_id' => $validated['branch_id'] ?: null,
+            'code'      => $validated['kode_lokasi'],
+            'name'      => $validated['nama_lokasi'],
+            'status'    => $validated['status'],
         ]);
 
         return redirect()->route('lokasi.index')

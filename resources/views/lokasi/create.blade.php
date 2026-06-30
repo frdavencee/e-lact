@@ -15,7 +15,12 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label-soft">Branch</label>
-                            <input type="text" name="branch" class="form-control-soft" value="{{ old('branch') }}" placeholder="Nama Branch">
+                            <select name="branch_id" class="form-select-soft">
+                                <option value="">-- Pilih Branch --</option>
+                                @foreach($branchList as $b)
+                                <option value="{{ $b->id }}" {{ old('branch_id') == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label-soft">Kode Lokasi <span class="text-danger">*</span></label>
