@@ -196,9 +196,6 @@ $fotoSections = [
         <div id="collapse-opm" class="collapse" data-bs-parent="#lokasiAccordion">
             <div class="acc-body">
                 @include('lokasi.partials.opm_section')
-                <div style="border-top:1px solid #f3f4f6;margin-top:1.25rem;padding-top:1.25rem;">
-                    @include('lokasi.partials.foto_section', ['sectionCategories' => [['value'=>'foto_opm','label'=>'Foto OPM']]])
-                </div>
             </div>
         </div>
     </div>

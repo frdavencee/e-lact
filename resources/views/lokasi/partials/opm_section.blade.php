@@ -101,3 +101,79 @@
 })();
 </script>
 @endpush
+
+{{-- Upload Foto per ODP + Port --}}
+@php
+$opmFotos = $lokasi->fotoLampiran->filter(fn($f) => $f->kategori === 'opm_hasil_ukur');
+$odpNames = $lokasi->opmRecords->pluck('odp_name')->unique()->filter()->values();
+@endphp
+
+<div style="border-top:1px solid #f3f4f6;margin-top:1.25rem;padding-top:1.25rem;">
+    <form method="POST" action="{{ route('foto.store', $lokasi) }}" enctype="multipart/form-data"
+        class="row g-2 mb-4 p-3" style="background:#f9fafb;border:1px dashed #d1d5db;border-radius:8px;">
+        @csrf
+        <input type="hidden" name="kategori" value="opm_hasil_ukur">
+        <input type="hidden" name="label" id="opmFotoLabel">
+        <div class="col-md-4">
+            <label class="form-label-soft">Nama ODP</label>
+            <select id="opmOdpSelect" class="form-select-soft" onchange="updateOpmLabel()">
+                <option value="">-- Pilih ODP --</option>
+                @foreach($odpNames as $odp)
+                <option value="{{ $odp }}">{{ $odp }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label-soft">Port</label>
+            <select id="opmPortSelect" class="form-select-soft" onchange="updateOpmLabel()">
+                @for($p = 1; $p <= 8; $p++)
+                <option value="P{{ $p }}">P{{ $p }}</option>
+                @endfor
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label-soft">Foto</label>
+            <input type="file" name="fotos[]" class="form-control-soft" accept="image/*" required>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn-primary-gradient w-100"><i class="bi bi-upload"></i> Upload</button>
+        </div>
+    </form>
+
+    @if($opmFotos->isNotEmpty())
+    <div class="row g-2">
+        @foreach($opmFotos as $foto)
+        <div class="col-6 col-md-3">
+            <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:white;">
+                <div style="position:relative;">
+                    <img id="foto-img-{{ $foto->id }}" src="{{ asset('storage/' . $foto->file_path) }}"
+                        style="width:100%;height:110px;object-fit:cover;display:block;">
+                    <input type="file" id="foto-replace-{{ $foto->id }}" accept="image/*" style="display:none;"
+                        onchange="replaceFoto({{ $foto->id }}, this)">
+                    <button type="button" onclick="document.getElementById('foto-replace-{{ $foto->id }}').click()"
+                        class="photo-remove-btn" style="right:28px;background:rgba(59,130,246,0.85);">
+                        <i class="bi bi-camera" style="font-size:0.65rem;"></i>
+                    </button>
+                    <button type="button" onclick="removeFoto({{ $foto->id }})" class="photo-remove-btn">×</button>
+                </div>
+                <div style="padding:0.35rem 0.5rem;border-top:1px solid #f3f4f6;">
+                    <input type="text" value="{{ $foto->label }}" placeholder="Label..."
+                        onblur="updateFotoLabel({{ $foto->id }}, this.value)"
+                        style="width:100%;border:none;background:transparent;font-size:0.75rem;color:#374151;outline:none;padding:0;">
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    @endif
+</div>
+
+@push('scripts')
+<script>
+function updateOpmLabel() {
+    const odp  = document.getElementById('opmOdpSelect').value;
+    const port = document.getElementById('opmPortSelect').value;
+    document.getElementById('opmFotoLabel').value = odp ? odp + ' - ' + port : port;
+}
+updateOpmLabel();
+</script>
