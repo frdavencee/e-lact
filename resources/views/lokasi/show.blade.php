@@ -191,7 +191,7 @@ $fotoSections = [
     <div class="acc-wrap">
         <button type="button" class="acc-btn collapsed d-flex justify-content-between align-items-center w-100 px-4 py-3 border-0 bg-white text-start"
             data-bs-toggle="collapse" data-bs-target="#collapse-opm">
-            <span style="font-weight:600;color:#374151;font-size:.9rem;">Data OPM</span>
+            <span style="font-weight:600;color:#374151;font-size:.9rem;">Lampiran Evident Hasil Ukur OPM</span>
             <i class="bi bi-chevron-down acc-icon"></i>
         </button>
         <div id="collapse-opm" class="collapse" data-bs-parent="#lokasiAccordion">
