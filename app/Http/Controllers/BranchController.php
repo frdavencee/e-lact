@@ -26,10 +26,9 @@ class BranchController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:branches,code',
         ]);
 
-        Branch::create($request->only('name', 'code'));
+        Branch::create($request->only('name'));
 
         return back()->with('success', 'Branch berhasil ditambahkan.');
     }
@@ -38,10 +37,9 @@ class BranchController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:branches,code,' . $branch->id,
         ]);
 
-        $branch->update($request->only('name', 'code'));
+        $branch->update($request->only('name'));
 
         return back()->with('success', 'Branch berhasil diperbarui.');
     }
