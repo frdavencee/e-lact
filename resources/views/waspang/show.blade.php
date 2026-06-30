@@ -5,7 +5,7 @@
 @section('content')
 <div class="detail-header">
     <h2>Detail Personel</h2>
-    <a href="{{ route('waspang.edit', $personel) }}" class="btn-soft-secondary"><i class="bi bi-pencil"></i> Edit</a>
+    <a href="{{ route('waspang.edit', ['waspang' => $personel->id]) }}" class="btn-soft-secondary"><i class="bi bi-pencil"></i> Edit</a>
 </div>
 
 <div class="detail-card mb-4">

@@ -41,8 +41,8 @@
                     <td>{{ $p->jabatan ?? '-' }}</td>
                     <td>
                         <div class="action-group">
-                            <a href="{{ route('waspang.edit', $p) }}" class="action-icon-btn btn-edit" title="Edit"><i class="bi bi-pencil"></i></a>
-                            <form action="{{ route('waspang.destroy', $p) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus?')">@csrf @method('DELETE')<button class="action-icon-btn btn-delete" title="Hapus"><i class="bi bi-trash"></i></button></form>
+                            <a href="{{ route('waspang.edit', ['waspang' => $p->id]) }}" class="action-icon-btn btn-edit" title="Edit"><i class="bi bi-pencil"></i></a>
+                            <form action="{{ route('waspang.destroy', ['waspang' => $p->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus?')">@csrf @method('DELETE')<button class="action-icon-btn btn-delete" title="Hapus"><i class="bi bi-trash"></i></button></form>
                         </div>
                     </td>
                 </tr>
