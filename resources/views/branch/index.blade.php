@@ -18,18 +18,13 @@
                 <input type="text" name="name" class="form-control-soft" value="{{ old('name') }}" placeholder="Branch Semarang" required>
                 @error('name')<p style="color:#dc2626;font-size:0.8rem;margin-top:0.25rem;">{{ $message }}</p>@enderror
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label-soft">Lokasi</label>
-                <select id="lokasiSelect" name="lokasi_id" class="form-select-soft">
-                    <option value="">-- Pilih Lokasi --</option>
-                    @foreach($lokasiList as $lok)
-                    <option value="{{ $lok->id }}" data-code="{{ $lok->code }}">{{ $lok->name }}</option>
-                    @endforeach
-                </select>
+                <input type="text" name="lokasi_name" class="form-control-soft" value="{{ old('lokasi_name') }}" placeholder="Nama Lokasi">
             </div>
             <div class="col-md-2">
                 <label class="form-label-soft">Kode Lokasi</label>
-                <input type="text" id="kodeLokasiInput" class="form-control-soft input-mono" readonly placeholder="Auto-fill" style="background:#f9fafb;color:#6b7280;">
+                <input type="text" name="lokasi_code" class="form-control-soft input-mono" value="{{ old('lokasi_code') }}" placeholder="Kode">
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn-primary-gradient w-100"><i class="bi bi-plus"></i> Tambah</button>

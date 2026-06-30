@@ -26,15 +26,20 @@ class BranchController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'lokasi_id' => 'nullable|exists:locations,id',
+            'name'        => 'required|string|max:255',
+            'lokasi_name' => 'nullable|string|max:255',
+            'lokasi_code' => 'nullable|string|max:255',
         ]);
 
         $branch = Branch::create(['name' => $request->name]);
 
-        if ($request->filled('lokasi_id')) {
-            Lokasi::where('id', $request->lokasi_id)
-                  ->update(['branch_id' => $branch->id]);
+        if ($request->filled('lokasi_name')) {
+            Lokasi::create([
+                'branch_id' => $branch->id,
+                'name'      => $request->lokasi_name,
+                'code'      => $request->lokasi_code ?? $request->lokasi_name,
+                'status'    => 'belum',
+            ]);
         }
 
         return back()->with('success', 'Branch berhasil ditambahkan.');
