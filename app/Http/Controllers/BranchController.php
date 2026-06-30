@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Lokasi;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller
@@ -12,23 +13,29 @@ class BranchController extends Controller
         $query = Branch::query();
         if ($request->filled('search')) {
             $keyword = $request->search;
-            $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', "%{$keyword}%")
-                  ->orWhere('code', 'like', "%{$keyword}%");
-            });
+            $query->where('name', 'like', "%{$keyword}%");
         }
         $branches = $query->with(['lokasi' => fn($q) => $q->select('id','branch_id','name','code')->orderBy('code')])
                          ->withCount('lokasi')->latest()->paginate(15);
-        return view('branch.index', compact('branches'));
+
+        $lokasiList = Lokasi::orderBy('name')->get(['id', 'name', 'code']);
+
+        return view('branch.index', compact('branches', 'lokasiList'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'      => 'required|string|max:255',
+            'lokasi_id' => 'nullable|exists:locations,id',
         ]);
 
-        Branch::create($request->only('name'));
+        $branch = Branch::create(['name' => $request->name]);
+
+        if ($request->filled('lokasi_id')) {
+            Lokasi::where('id', $request->lokasi_id)
+                  ->update(['branch_id' => $branch->id]);
+        }
 
         return back()->with('success', 'Branch berhasil ditambahkan.');
     }
@@ -39,7 +46,7 @@ class BranchController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $branch->update($request->only('name'));
+        $branch->update(['name' => $request->name]);
 
         return back()->with('success', 'Branch berhasil diperbarui.');
     }
