@@ -119,7 +119,14 @@
                         <label class="form-label-soft">Nama Branch</label>
                         <input type="text" name="name" id="editName" class="form-control-soft" required>
                     </div>
-                    
+                    <div class="mb-3">
+                        <label class="form-label-soft">Lokasi</label>
+                        <input type="text" name="lokasi_name" id="editLokasiName" class="form-control-soft" placeholder="Tambah lokasi baru (opsional)">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-soft">Kode Lokasi</label>
+                        <input type="text" name="lokasi_code" id="editLokasiCode" class="form-control-soft input-mono" placeholder="Kode lokasi">
+                    </div>
                 </div>
                 <div class="modal-footer" style="border-top:1px solid #e5e7eb;padding:1rem 1.5rem;">
                     <button type="button" class="btn-soft-secondary" data-bs-dismiss="modal">Batal</button>

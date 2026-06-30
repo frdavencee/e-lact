@@ -48,10 +48,21 @@ class BranchController extends Controller
     public function update(Request $request, Branch $branch)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
+            'lokasi_name' => 'nullable|string|max:255',
+            'lokasi_code' => 'nullable|string|max:255',
         ]);
 
         $branch->update(['name' => $request->name]);
+
+        if ($request->filled('lokasi_name')) {
+            Lokasi::create([
+                'branch_id' => $branch->id,
+                'name'      => $request->lokasi_name,
+                'code'      => $request->lokasi_code ?? $request->lokasi_name,
+                'status'    => 'belum',
+            ]);
+        }
 
         return back()->with('success', 'Branch berhasil diperbarui.');
     }
