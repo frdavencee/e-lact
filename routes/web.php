@@ -67,6 +67,7 @@ Route::middleware(['auth', 'verified', 'role:admin,petugas'])->group(function ()
         Route::get('marking-kabel', [LokasiController::class, 'marking'])->name('lokasi.marking');
         Route::post('marking-kabel', [MarkingKabelController::class, 'store'])->name('marking-kabel.store');
         Route::put('marking-kabel', [MarkingKabelController::class, 'bulkUpdate'])->name('marking-kabel.bulk-update');
+        Route::put('marking-kabel/{markingKabel}/label', [MarkingKabelController::class, 'updateLabel'])->name('marking-kabel.label');
         Route::delete('marking-kabel/{markingKabel}', [MarkingKabelController::class, 'destroy'])->name('marking-kabel.destroy');
 
         Route::post('project', [ProjectController::class, 'store'])->name('project.store');

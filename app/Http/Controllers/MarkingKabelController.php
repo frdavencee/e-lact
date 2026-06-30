@@ -49,6 +49,13 @@ class MarkingKabelController extends Controller
         return back()->with('success', 'Data marking kabel berhasil ditambahkan.');
     }
 
+    public function updateLabel(Request $request, Lokasi $lokasi, MarkingKabel $markingKabel)
+    {
+        $request->validate(['jenis_kabel' => 'nullable|string|max:255']);
+        $markingKabel->update(['jenis_kabel' => $request->jenis_kabel ?: null]);
+        return response()->json(['success' => true]);
+    }
+
     public function destroy(Lokasi $lokasi, MarkingKabel $markingKabel)
     {
         $markingKabel->delete();

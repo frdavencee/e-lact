@@ -43,9 +43,11 @@ $mkFotos = $lokasi->fotoLampiran->filter(fn($f) => $f->kategori === 'marking_kab
             </div>
             @endif
             <div style="padding:0.6rem;">
-                @if($mk->jenis_kabel)
-                <p style="margin:0 0 2px;font-size:0.8rem;font-weight:600;color:#374151;">{{ $mk->jenis_kabel }}</p>
-                @endif
+                <input type="text"
+                    value="{{ $mk->jenis_kabel ?? '' }}"
+                    placeholder="Jenis Kabel (opsional)"
+                    onblur="updateMkLabel({{ $mk->id }}, this.value)"
+                    style="width:100%;border:none;background:transparent;font-size:0.8rem;font-weight:600;color:#374151;outline:none;padding:0 0 2px;">
                 <p style="margin:0;font-size:0.85rem;color:#4b5563;"><i class="bi bi-rulers" style="font-size:0.75rem;"></i> {{ $mk->panjang_meter }} m</p>
                 <form action="{{ route('marking-kabel.destroy', [$lokasi, $mk]) }}" method="POST"
                     style="margin-top:0.4rem;" onsubmit="return confirm('Hapus entri ini?')">
