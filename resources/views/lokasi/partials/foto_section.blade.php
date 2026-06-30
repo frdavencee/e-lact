@@ -51,8 +51,15 @@ $single    = count($sectionCategories) === 1;
     <div class="col-6 col-md-3">
         <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:white;">
             <div style="position:relative;">
-                <img src="{{ asset('storage/' . $foto->file_path) }}" alt="{{ $foto->label }}"
+                <img id="foto-img-{{ $foto->id }}" src="{{ asset('storage/' . $foto->file_path) }}" alt="{{ $foto->label }}"
                     style="width:100%;height:110px;object-fit:cover;display:block;">
+                <input type="file" id="foto-replace-{{ $foto->id }}" accept="image/*" style="display:none;"
+                    onchange="replaceFoto({{ $foto->id }}, this)">
+                <button type="button" onclick="document.getElementById('foto-replace-{{ $foto->id }}').click()"
+                    title="Ganti foto"
+                    style="position:absolute;top:4px;right:28px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(59,130,246,0.85);color:#fff;font-size:0.65rem;cursor:pointer;line-height:22px;text-align:center;">
+                    <i class="bi bi-camera"></i>
+                </button>
                 <button type="button" onclick="removeFoto({{ $foto->id }})"
                     style="position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(220,38,38,0.85);color:#fff;font-size:0.75rem;cursor:pointer;line-height:22px;text-align:center;">×</button>
             </div>

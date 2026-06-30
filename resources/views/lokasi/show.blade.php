@@ -281,6 +281,27 @@ $fotoSections = [
     }
 
     // ── Delete foto ────────────────────────────────────────────────────
+    window.replaceFoto = function(id, input) {
+        const file = input.files[0];
+        if (!file) return;
+        const form = new FormData();
+        form.append('foto', file);
+        form.append('_method', 'PUT');
+        fetch('/lokasi/' + LOKASI_SHOW + '/foto/' + id + '/replace', {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': CSRF_SHOW },
+            body: form,
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) {
+                document.getElementById('foto-img-' + id).src = d.url + '?t=' + Date.now();
+            }
+        })
+        .catch(() => alert('Gagal mengganti foto.'));
+        input.value = '';
+    };
+
     window.updateMkLabel = function(id, value) {
         fetch('/lokasi/' + LOKASI_SHOW + '/marking-kabel/' + id + '/label', {
             method: 'PUT',

@@ -39,6 +39,15 @@ class FotoLampiranController extends Controller
         return back()->with('success', 'Foto lampiran berhasil diupload.');
     }
 
+    public function replacePhoto(Request $request, Lokasi $lokasi, FotoLampiran $foto)
+    {
+        $request->validate(['foto' => 'required|image|mimes:jpg,jpeg,png|max:5120']);
+        Storage::disk('public')->delete($foto->file_path);
+        $path = $request->file('foto')->store('foto_lampiran/' . $lokasi->id . '/' . $foto->kategori, 'public');
+        $foto->update(['file_path' => $path]);
+        return response()->json(['success' => true, 'url' => asset('storage/' . $path)]);
+    }
+
     public function updateLabel(Lokasi $lokasi, FotoLampiran $foto, Request $request)
     {
         $request->validate(['label' => 'nullable|string|max:255']);
