@@ -19,7 +19,7 @@
                 @error('name')<p style="color:#dc2626;font-size:0.8rem;margin-top:0.25rem;">{{ $message }}</p>@enderror
             </div>
             <div class="col-md-3">
-                <label class="form-label-soft">Kode Branch</label>
+                <label class="form-label-soft">Kode Lokasi</label>
                 <input type="text" name="code" class="form-control-soft input-mono" value="{{ old('code') }}" placeholder="SMG" required>
                 @error('code')<p style="color:#dc2626;font-size:0.8rem;margin-top:0.25rem;">{{ $message }}</p>@enderror
             </div>
@@ -43,7 +43,7 @@
                     <tr>
                         <th width="60">#</th>
                         <th>Nama Branch</th>
-                        <th width="100">Kode Branch</th>
+                        <th width="80">Kode</th>
                         <th>Lokasi</th>
                         <th>Kode Lokasi</th>
                         <th width="80">Aksi</th>
@@ -117,7 +117,7 @@
                         <input type="text" name="name" id="editName" class="form-control-soft" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label-soft">Kode Branch</label>
+                        <label class="form-label-soft">Kode Lokasi</label>
                         <input type="text" name="code" id="editCode" class="form-control-soft input-mono" required>
                     </div>
                 </div>
