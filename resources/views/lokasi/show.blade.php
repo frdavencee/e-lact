@@ -138,6 +138,9 @@ $fotoSections = [
         <div id="collapse-ct" class="collapse" data-bs-parent="#lokasiAccordion">
             <div class="acc-body">
                 @include('lokasi.partials.commissioning_test')
+                <div style="border-top:1px solid #f3f4f6;margin-top:1.25rem;padding-top:1.25rem;">
+                    @include('lokasi.partials.foto_section', ['sectionCategories' => [['value'=>'foto_ct','label'=>'Foto Commissioning Test']]])
+                </div>
             </div>
         </div>
     </div>
@@ -200,6 +203,9 @@ $fotoSections = [
         <div id="collapse-opm" class="collapse" data-bs-parent="#lokasiAccordion">
             <div class="acc-body">
                 @include('lokasi.partials.opm_section')
+                <div style="border-top:1px solid #f3f4f6;margin-top:1.25rem;padding-top:1.25rem;">
+                    @include('lokasi.partials.foto_section', ['sectionCategories' => [['value'=>'foto_opm','label'=>'Foto OPM']]])
+                </div>
             </div>
         </div>
     </div>
@@ -214,6 +220,9 @@ $fotoSections = [
         <div id="collapse-otdr" class="collapse" data-bs-parent="#lokasiAccordion">
             <div class="acc-body">
                 @include('lokasi.partials.otdr_section')
+                <div style="border-top:1px solid #f3f4f6;margin-top:1.25rem;padding-top:1.25rem;">
+                    @include('lokasi.partials.foto_section', ['sectionCategories' => [['value'=>'foto_otdr','label'=>'Foto OTDR']]])
+                </div>
             </div>
         </div>
     </div>
