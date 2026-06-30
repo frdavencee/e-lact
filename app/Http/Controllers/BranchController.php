@@ -18,9 +18,7 @@ class BranchController extends Controller
         $branches = $query->with(['lokasi' => fn($q) => $q->select('id','branch_id','name','code')->orderBy('code')])
                          ->withCount('lokasi')->latest()->paginate(15);
 
-        $lokasiList = Lokasi::orderBy('name')->get(['id', 'name', 'code']);
-
-        return view('branch.index', compact('branches', 'lokasiList'));
+        return view('branch.index', compact('branches'));
     }
 
     public function store(Request $request)
